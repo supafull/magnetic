@@ -1,0 +1,147 @@
+commonAnnotations: {} # see https://github.com/bitnami/charts/tree/master/bitnami/common
+
+commonLabels: {} # see https://github.com/bitnami/charts/tree/master/bitnami/common
+
+## Define serviceAccount names for components.
+## TODO: these aren't used yet
+##
+serviceAccounts:
+  project:
+    create: false
+
+ingressnginx:
+  enabled: false
+
+project:
+  name: "{{ .Release.Name }}"
+  local:
+    enabled: false
+    enableDbNodePorts: false
+
+frontend:
+  enabled: true
+  debug: false
+
+  ## Development using k3d and local python/TS code
+  local:
+    enabled: false
+    # ## the volume mount for the local python code. This is the path to the root of the python code
+    # ## If not set, it will use the code compiled into the container
+    # srcFrom: src
+    # ## a port to use for the dev-local frontend for serving the frontend code.
+    # ## If not set, the frontend will be served from the container
+    # frontendPort: 5000
+    ## expose db ports for the local postgresqls
+    # enableDbNodePorts: false
+
+  name: frontend
+  projectName: "Frontend"
+
+  # ## Initial superuser for bootstrap
+  # ##
+  # firstSuperuser: a_good_username
+  # firstSuperuserPassword: a_good_password
+  # usersOpenRegistration: false
+
+  diagnosticMode:
+    enabled: false
+    command:
+      - sleep
+    args:
+      - infinity
+
+  ## Ingress related configuration for setting up the SSL ingress
+  ##
+  ingress:
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "30m" # increased to 50m for the dbs
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600" # increased to 3600s for better websocket support
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600" # increased to 3600s for better websocket support
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+    tls:
+      enabled: true
+      secretName: "project-project-cert"
+
+  image:
+    # registry: docker.io
+    repository: magnetic/magnetic-frontend
+    tag: 0.0.1
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+
+  podAnnotations: {}
+  replicaCount: 1
+
+  persistence:
+    enabled: false
+    accessMode: ReadWriteMany
+    size: 10Gi
+    # storageClassName: -  # something like longhorn is REQUIRED
+
+  secretKeySecretName: secret-key
+
+  extraEnv: {}
+
+  strategy:
+    type: RollingUpdate
+
+  nodeHosts: ["node1.example.com"] # one for each publicly configured node - TODO: investigate doing this automatically!
+  haHost: magnetic.example.com
+  ## per-domain static files available at https://node_host/a_string_here/...
+  ## Files should be put in source at frontend/public/node_host/a_string_here/...
+  ##
+  perDomain: []
+
+  ## TODO: document
+  service:
+    annotations: {}
+    labels: {}
+    clusterIP: ""
+
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    servicePort: 80
+    type: ClusterIP
+
+  application:
+    listenAddress: 0.0.0.0
+    listenPort: 8000
+  ## Additional transcrobes container arguments
+  ##
+  extraArgs: {}
+
+electric:
+  enabled: true
+  name: electric
+  pgProxySecretName: electric-pg-proxy
+  image:
+    repository: electricsql/electric
+    tag: latest
+    pullPolicy: IfNotPresent
+  podAnnotations: {}
+  replicaCount: 1
+  extraEnv: {}
+  strategy:
+    type: Recreate
+
+  ## TODO: document
+  service:
+    annotations: {}
+    labels: {}
+    servicePortSatellite: 5133
+    servicePortLogicalPub: 5433
+    servicePortPgProxy: 65432
+
+    nodePortSatellite: 31133
+    nodePortLogicalPub: 31433
+    nodePortPgProxy: 31432
+
+  # ## application parameters
+  application:
+    listenPortSatellite: 5133
+    listenPortLogicalPub: 5433
+    listenPortPgProxy: 65432
+  extraArgs: {}

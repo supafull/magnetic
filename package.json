@@ -1,0 +1,29 @@
+{
+  "name": "magnetic",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:migrate": ". ./.env && npx pg-migrations apply --database $DATABASE_URL --directory ./db/migrations",
+    "db:seed": "tsx db-seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@databases/pg": "^5.5.0",
+    "@databases/pg-migrations": "^5.0.3",
+    "@faker-js/faker": "^8.4.1",
+    "pg-migration": "^3.0.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.42.1",
+    "@types/uuid": "^9.0.8",
+    "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
+    "dotenv-flow": "^4.1.0",
+    "react-admin": "^4.16.15",
+    "tsx": "^4.7.2"
+  }
+}

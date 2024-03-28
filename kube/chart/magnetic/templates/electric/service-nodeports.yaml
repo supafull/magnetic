@@ -1,0 +1,35 @@
+{{- if .Values.electric.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+{{- if .Values.electric.service.annotations }}
+  annotations:
+{{ toYaml .Values.electric.service.annotations | indent 4 }}
+{{- end }}
+  labels:
+    {{- include "project.electric.labels" . | nindent 4 }}
+{{- if .Values.electric.service.labels }}
+{{ toYaml .Values.electric.service.labels | indent 4 }}
+{{- end }}
+  name: {{ template "project.electric.fullname" . }}
+spec:
+  type: NodePort
+  ports:
+  - name: satellite-http
+    port: {{ .Values.electric.service.servicePortSatellite }}
+    protocol: TCP
+    targetPort: {{ .Values.electric.application.listenPortSatellite }}
+    nodePort: {{ .Values.electric.service.nodePortSatellite }}
+  - name: logical-pub-tcp
+    port: {{ .Values.electric.service.servicePortLogicalPub }}
+    protocol: TCP
+    targetPort: {{ .Values.electric.application.listenPortLogicalPub }}
+    nodePort: {{ .Values.electric.service.nodePortLogicalPub }}
+  - name: pg-proxy-tcp
+    port: {{ .Values.electric.service.servicePortPgProxy }}
+    protocol: TCP
+    targetPort: {{ .Values.electric.application.listenPortPgProxy }}
+    nodePort: {{ .Values.electric.service.nodePortPgProxy }}
+  selector:
+    {{- include "project.electric.matchLabels" . | nindent 4 }}
+{{- end }}

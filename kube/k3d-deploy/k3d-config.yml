@@ -1,0 +1,62 @@
+# k3d configuration file
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: project
+servers: 1
+kubeAPI:
+  host: "localhost"
+  hostIP: "127.0.0.1"
+  hostPort: "6446"
+image: rancher/k3s:v1.29.4-k3s1
+
+registries: # define how registries should be created or used
+  use:
+    - k3d-registry.localhost:5111
+
+ports:
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
+  - port: 443:443
+    nodeFilters:
+      - loadbalancer
+  # supabase postgresql
+  - port: 30432:30432
+    nodeFilters:
+      - loadbalancer
+  # analyticsdb postgresql
+  - port: 30433:30433
+    nodeFilters:
+      - loadbalancer
+  # electric
+  - port: 31133:31133
+    nodeFilters:
+      - loadbalancer
+  - port: 31433:31433
+    nodeFilters:
+      - loadbalancer
+  - port: 31432:31432
+    nodeFilters:
+      - loadbalancer
+
+options:
+  k3d:
+    wait: true
+    timeout: "60s"
+    disableLoadbalancer: false
+    disableImageVolume: false
+    disableRollback: false
+
+  k3s:
+    extraArgs:
+      - arg: "--tls-san=127.0.0.1"
+        nodeFilters:
+          - server:*
+      - arg: "--disable=traefik"
+        nodeFilters:
+          - server:*
+
+  kubeconfig:
+    updateDefaultKubeconfig: false
+    switchCurrentContext: false

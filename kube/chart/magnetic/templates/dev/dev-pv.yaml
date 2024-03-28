@@ -1,0 +1,19 @@
+{{- if and .Values.frontend.enabled .Values.frontend.persistence.enabled .Values.frontend.local.enabled -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "project.frontend.fullname" . }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    type: local
+    {{- include "project.frontend.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.frontend.persistence.storageClassName }}
+  capacity:
+    storage: {{ .Values.frontend.persistence.size }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/opt/frontend/volumes/frontend-app"
+{{- end }}

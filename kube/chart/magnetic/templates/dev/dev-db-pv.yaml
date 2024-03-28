@@ -1,0 +1,19 @@
+{{- if and .Values.supaplus.supabase.postgresql.primary.persistence.enabled .Values.project.local.enabled -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ template "project.fullname" . }}-db
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    type: local
+    {{- include "project.common.labels" . | nindent 4 }}
+spec:
+  storageClassName: manual-db
+  capacity:
+    storage: {{ .Values.supaplus.supabase.postgresql.primary.persistence.size }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/opt/project/volumes/project-db"
+{{- end }}

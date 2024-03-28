@@ -1,0 +1,24 @@
+{{- if and .Values.project.local.enabled .Values.project.local.enableDbNodePorts -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+  name: postgresql-nodeport
+spec:
+  ports:
+  - name: nodeport-30432
+    nodePort: 30432
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+  type: NodePort
+{{- end -}}

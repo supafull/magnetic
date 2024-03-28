@@ -1,0 +1,22 @@
+apiVersion: v2
+name: magnetic
+description: A Kubernetes Helm Chart for installing magnetic
+version: 0.0.1
+keywords:
+  - magnetic
+home: https://magnetic.example.com
+dependencies:
+  - name: ingress-nginx
+    alias: ingressnginx
+    version: 4.10.x
+    repository: https://kubernetes.github.io/ingress-nginx
+    condition: ingressnginx.enabled
+
+  - name: supaplus
+    version: 0.0.x
+    repository: https://supafull.github.io/helm-charts
+    condition: supaplus.enabled
+
+  - name: common
+    version: 2.x.x
+    repository: https://charts.bitnami.com/bitnami

@@ -1,0 +1,247 @@
+ingressnginx:
+  enabled: true
+
+project:
+  local:
+    enabled: true
+    enableDbNodePorts: true
+
+frontend:
+  ## Development using k3d and local python/TS code
+  local:
+    enabled: true
+    # srcFrom: /backend
+    ## a port to use for the dev-local frontend for serving the frontend code.
+    ## If not set, the frontend will be served from the container
+    frontendPort: 5000
+
+  persistence:
+    enabled: false
+    size: 2Gi
+    # storageClassName: local-path
+    # MUST! be the same what is in the pv
+    accessMode: ReadWriteOnce
+    storageClassName: manual-app
+
+  ingress:
+    className: nginx
+    annotations:
+      ingress.kubernetes.io/ssl-redirect: "true"
+    tls:
+      enabled: true
+      secretName: magnetic-magnetic-cert
+
+  debug: true
+  replicaCount: 1
+
+  image:
+    registry: k3d-registry.localhost:5111
+
+  strategy:
+    type: RollingUpdate
+    # rollingUpdate:
+    #   maxSurge: 2        # how many pods we can add at a time
+    #   maxUnavailable: 1  # maxUnavailable define how many pods can be unavailable
+    # during the rolling update
+  haHost: magnetic.localhost
+  nodeHosts: []
+
+  application: {}
+  perDomain:
+    - ".well-known"
+
+supaplus:
+  analytics:
+    resourcesPreset: "none"
+    logLevel: debug
+    diagnosticMode:
+      enabled: false
+      # command: [ "/bin/bash", "-c", "--" ]
+      # args: [ "while true; do sleep 10; done;" ]
+
+    application: {}
+    #   dbSchema: _analytics
+
+  analyticsdb:
+    primary:
+      resourcesPreset: "none"
+    enabled: true
+    diagnosticMode:
+      enabled: false
+    image:
+      debug: true
+    auth:
+      existingSecret: externaldb-analyticsdb
+
+  functions:
+    userFunctionsPath: /functions
+    # command:
+    #   - "edge-runtime"
+    # args:
+    #   - "start"
+    #   - "--port"
+    #   - "{{ .Values.functions.containerPorts.http }}"
+    #   - "--main-service"
+    #   - "/functions/main"
+
+    resourcesPreset: "none"
+    diagnosticMode:
+      enabled: false
+    customLivenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+      httpGet:
+        path: /hello
+        port: http
+    customReadinessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+      httpGet:
+        path: /hello
+        port: http
+    customStartupProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+      httpGet:
+        path: /hello
+        port: http
+
+    ## Development using k3d and local python/TS code
+    local:
+      enabled: true
+      ## the volume mount for the local ts code. This is the path to the root of the ts code
+      ## If not set, it will use the code compiled into the container
+      srcFrom: /functions
+    image:
+      registry: k3d-registry.localhost:5111
+      repository: magnetic/magnetic-functions
+
+  imgproxy:
+    resourcesPreset: "none"
+
+  minio:
+    resourcesPreset: "none"
+    enabled: true
+    auth:
+      existingSecret: "minio-secret"
+      rootUserSecretKey: "root-user"
+      rootPasswordSecretKey: "root-password"
+
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      hostname: minio.localhost
+
+  supabase:
+    publicURL: "https://supabase.localhost"
+    global:
+      jwt:
+        existingSecret: jwt-secret
+    auth:
+      resourcesPreset: "none"
+      extraEnvVars:
+        # GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+        # GOTRUE_MAILER_AUTOCONFIRM: "true"
+        - name: API_EXTERNAL_URL
+          value: "https://supabase.localhost"
+    kong:
+      kong:
+        resourcesPreset: "none"
+      ingress:
+        enabled: true
+        hostname: supabase.localhost
+        ingressClassName: nginx
+        tls: true
+        extraTls:
+          - hosts:
+              - supabase.localhost
+            secretName: "magnetic-supabase-cert"
+
+    meta:
+      resourcesPreset: "none"
+    postgresql:
+      image:
+        debug: true
+      primary:
+        resourcesPreset: "none"
+        persistence:
+          existingClaim: "magnetic-db"
+        extendedConfiguration: |-
+          wal_level = logical
+          huge_pages = off
+          max_stack_depth = 6MB
+
+      # Needed because of a bug when specifying extendedConf
+      volumePermissions:
+        enabled: true
+      auth:
+        existingSecret: db-password
+    realtime:
+      resourcesPreset: "none"
+    rest:
+      resourcesPreset: "none"
+    storage:
+      resourcesPreset: "none"
+      extraEnvVars:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: root-user
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: root-password
+
+    studio:
+      resourcesPreset: "none"
+      publicURL: "https://supabase-studio.localhost"
+      ingress:
+        hostname: supabase-studio.localhost
+        enabled: true
+        ingressClassName: nginx
+        tls: true
+        extraTls:
+        - hosts:
+            - supabase-studio.localhost
+          secretName: "magnetic-supabase-studio-cert"
+
+      extraEnvVars:
+        - name: NEXT_PUBLIC_ENABLE_LOGS
+          value: "true"
+        - name: NEXT_ANALYTICS_BACKEND_PROVIDER
+          value: postgres  # postgres, bigquery
+        - name: LOGFLARE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: supaplus-logflare
+              key: api-key
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: root-user
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: root-password
+
+  externalDatabaseAnalyticsdb:
+    host: "some-postgresql"
+    port: 5432
+    user: supabase_admin_user
+    database: postgres
+    password: "badpassword"
+    existingSecret: "db-password"
+    existingSecretPasswordKey: "postgres-password"

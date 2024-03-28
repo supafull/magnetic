@@ -1,0 +1,64 @@
+{{- if .Values.frontend.enabled -}}
+{{- $fullName := include "project.frontend.fullname" . -}}
+{{- $servicePort := .Values.frontend.service.servicePort -}}
+{{- $frontendPort := .Values.frontend.local.frontendPort -}}
+{{- $localPort := and .Values.frontend.local.enabled .Values.frontend.local.frontendPort -}}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  {{- with .Values.frontend.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: {{ include "project.frontend.fullname" . }}
+  labels:
+    {{- include "project.frontend.labels" . | nindent 4 }}
+
+spec:
+  ingressClassName: {{ .Values.frontend.ingress.className }}
+{{- if .Values.frontend.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.frontend.haHost }}
+      {{- range .Values.frontend.nodeHosts }}
+        - {{ . }}
+      {{- end }}
+      secretName: {{ .Values.frontend.ingress.tls.secretName }}
+{{- end }}
+  rules:
+    - host: {{ .Values.frontend.haHost }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                {{- if $localPort }}
+                name: {{ $fullName }}-local-port
+                port:
+                  number: {{ $frontendPort }}
+                {{ else }}
+                name: {{ $fullName }}
+                port:
+                  number: {{ $servicePort }}
+                {{- end }}
+  {{- range .Values.frontend.nodeHosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                {{- if $localPort }}
+                name: {{ $fullName }}-local-port
+                port:
+                  number: {{ $frontendPort }}
+                {{ else }}
+                name: {{ $fullName }}
+                port:
+                  number: {{ $servicePort }}
+                {{- end }}
+  {{- end }}
+{{- end }}

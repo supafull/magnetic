@@ -1,0 +1,75 @@
+{{- if .Values.electric.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "project.electric.fullname" . }}
+  labels:
+    {{- include "project.electric.labels" . | nindent 4 }}
+
+spec:
+  replicas: {{ .Values.electric.replicaCount }}
+  {{- if .Values.electric.strategy }}
+  strategy:
+{{ toYaml .Values.electric.strategy | indent 4 }}
+  {{- end }}
+
+  selector:
+    matchLabels:
+      {{- include "project.electric.matchLabels" . | nindent 6 }}
+
+  template:
+    metadata:
+    {{- if .Values.electric.podAnnotations }}
+      annotations:
+{{ toYaml .Values.electric.podAnnotations | indent 8 }}
+    {{- end }}
+      labels:
+        {{- include "project.electric.labels" . | nindent 8 }}
+    spec:
+      initContainers:
+        {{- include "supaplus.database.checkdbready" .Subcharts.supaplus | indent 8 }}
+
+      containers:
+      - name: electric
+        image: {{ include "electric.image" . }}
+        imagePullPolicy: {{ .Values.electric.image.pullPolicy }}
+
+        ports:
+        - name: satellite-http
+          containerPort: {{ .Values.electric.application.listenPortSatellite }}
+        - name: logical-pub-tcp
+          containerPort: {{ .Values.electric.application.listenPortLogicalPub }}
+        - name: pg-proxy-tcp
+          containerPort: {{ .Values.electric.application.listenPortPgProxy }}
+        env:
+        {{- include "supaplus.database.envvars" .Subcharts.supaplus | indent 8 }}
+
+        - name: DATABASE_URL
+          value: "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"
+
+        - name: LOGICAL_PUBLISHER_HOST
+          value: {{ template "project.electric.fullname" . }}
+        - name: LOGICAL_PUBLISHER_PORT
+          value: {{ .Values.electric.application.listenPortLogicalPub | quote }}
+
+        - name: HTTP_PORT
+          value: {{ .Values.electric.application.listenPortSatellite | quote }}
+
+        - name: PG_PROXY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.electric.pgProxySecretName }}
+              key: proxy-password
+
+        - name: DATABASE_USE_IPV6
+          value: 'false'
+        - name: ELECTRIC_USE_IPV6
+          value: 'false'
+
+        # - name: AUTH_JWT_ALG
+        #   value: "HS512"
+        # - name: AUTH_JWT_KEY
+        #   value: "4d1649d569f7bbaa03c2369168405798773710dd81aac9a02a92b291ffd994d551ec1b407f094d71aff764c02c3e7366a2bef9bd4aef18d1fff5d99ade4142a4"
+        - name: AUTH_MODE
+          value: 'insecure'
+{{- end }}

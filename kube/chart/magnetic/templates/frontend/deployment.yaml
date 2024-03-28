@@ -1,0 +1,136 @@
+{{- if .Values.frontend.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "project.frontend.fullname" . }}
+  labels:
+    {{- include "project.frontend.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  {{- if .Values.frontend.strategy }}
+  strategy:
+{{ toYaml .Values.frontend.strategy | indent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "project.frontend.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- if .Values.frontend.podAnnotations }}
+      annotations:
+{{ toYaml .Values.frontend.podAnnotations | indent 8 }}
+    {{- end }}
+      labels:
+        {{- include "project.frontend.labels" . | nindent 8 }}
+    spec:
+      {{- include "frontend.imagePullSecrets" . | nindent 6 }}
+      containers:
+        - name: {{ template "project.name" . }}-{{ .Values.frontend.name }}
+          image: {{ include "frontend.image" . }}
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy | quote }}
+
+          {{- if .Values.frontend.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.frontend.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.frontend.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.frontend.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.args "context" $) | nindent 12 }}
+          {{- end }}
+
+          ports:
+            - name: http
+              containerPort: {{ .Values.frontend.application.listenPort }}
+              protocol: TCP
+          env:
+            - name: PROJECT_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: PROJECT_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PROJECT_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: PROJECT_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+            - name: PROJECT_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+
+            {{- range $key, $value := .Values.frontend.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+
+            {{ include "supaplus.database.envvars" .Subcharts.supaplus | nindent 12}}
+
+            - name: SYSTEM_HOSTS
+              value: {{ include "project.frontend.fullname" . }},{{ include "project.frontend.reallyFullname" . }}
+            - name: NODE_HOSTS
+              value: {{ .Values.frontend.nodeHosts | toJson | squote }}
+            - name: SERVER_NAME
+              value: {{ include "project.frontend.reallyFullname" . }}
+            - name: HA_HOST
+              value: "{{ .Values.frontend.haHost }}"
+            - name: PER_DOMAIN
+              value: {{ .Values.frontend.perDomain | toJson | squote }}
+            - name: SERVER_HOST
+              value: "http{{ if .Values.frontend.ingress.tls.enabled }}s{{ end }}://{{ .Values.frontend.haHost }}"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.frontend.secretKeySecretName }}
+                  key: secret-key
+
+            - name: LISTEN_ADDRESS
+              value: "{{ .Values.frontend.application.listenAddress }}"
+            - name: LISTEN_PORT
+              value: "{{ .Values.frontend.application.listenPort }}"
+
+            {{- if .Values.frontend.debug }}
+            - name: DEBUG
+              value: "True"
+            {{- end }}
+
+            - name: PROJECT_NAME
+              value: "{{ .Values.frontend.projectName }}"
+
+            - name: USERS_OPEN_REGISTRATION
+              value: "{{ .Values.frontend.usersOpenRegistration }}"
+
+      {{- if or .Values.frontend.persistence.enabled (not (empty .Values.frontend.local.srcFrom)) }}
+          volumeMounts:
+      {{- if .Values.frontend.local.srcFrom }}
+          - name: src
+            mountPath: /app
+      {{- end }}
+      {{- if .Values.frontend.persistence.enabled }}
+          - mountPath: "{{ .Values.frontend.persistence.dataRoot }}"
+            name: {{ include "project.frontend.fullname" . }}
+      {{- end }}
+      volumes:
+      {{- if .Values.frontend.persistence.enabled }}
+        - name: {{ include "project.frontend.fullname" . }}
+          persistentVolumeClaim:
+            claimName: {{ include "project.frontend.fullname" . }}
+      {{- end }}
+      {{- if .Values.frontend.local.srcFrom }}
+        - name: src
+          hostPath:
+            path: {{ .Values.frontend.local.srcFrom }}
+            type: DirectoryOrCreate
+      {{- end }}
+      {{- end }}
+      restartPolicy: Always
+status: {}
+{{- end }}

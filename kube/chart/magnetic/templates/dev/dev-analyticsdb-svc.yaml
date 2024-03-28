@@ -1,0 +1,24 @@
+{{- if and .Values.supaplus.analyticsdb.enabled .Values.project.local.enabled .Values.project.local.enableDbNodePorts -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/name: analyticsdb
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+  name: analyticsdb-nodeport
+spec:
+  ports:
+  - name: nodeport-30433
+    nodePort: 30433
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/name: analyticsdb
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+  type: NodePort
+{{- end -}}

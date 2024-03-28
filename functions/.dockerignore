@@ -1,0 +1,20 @@
+# Ignore .git and .hg directories
+.git
+.hg
+
+# Ignore node_modules directory
+node_modules
+
+# Ignore log files
+*.log
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore files related to Docker
+Dockerfile
+.dockerignore
+
+# Ignore dist directory
+dist
