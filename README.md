@@ -1,17 +1,18 @@
 # Magnetic
 
 ## Introduction
+
 This project contains code and configuration examples for setting up the backend and frontend for a PWA CRM using React/Typescript/Vite(PWA) with React Admin (MUI) + Electric SQL on the frontend and Supabase on the backend, all deployable to a Kubernetes cluster via a Kubernetes Helm chart. Local development is supported using `k3d`, allowing to run an isolated, local kubernetes cluster while still taking advantage of the Vite and (Supabase) Deno functions update-on-save (via local mapped volumes and network foo).
 
 It includes an adaptation of the React Admin [`ra-supabase`](https://github.com/marmelab/ra-supabase) demo code (which is itself an adaptation of the React Admin demo CRM) to be used with [`electric-sql`](https://electric-sql.com). The code was originally compatible with `electric` `0.10.1` and `react-admin` but may be updated for later versions.
 
-The kubernetes chart uses the `bitnami` [`supabase`](https://github.com/bitnami/charts/tree/main/bitnami/supabase) (4+) chart as a base for the `supabase` support, adding the missing features as at April 2024 (so `analytics/vector+logflare`, `imgproxy` and `functions`). Hopefully either the `bitnami` chart will eventually include the missing features (don't hold your breath!) or the [`supabase-community`](https://github.com/supabase-community/supabase-kubernetes/) chart will eventually evolve to support multi-node deployments (only support single-node deployments on kubernetes... I know, right!).
+The kubernetes chart uses [`supaplus` `helm` chart](https://github.com/supafull/helm-charts/) for `supabase` support, which in turn uses the `bitnami` [`supabase`](https://github.com/bitnami/charts/tree/main/bitnami/supabase) (4+) chart as a base, adding the missing features as at April 2024 (so `analytics/vector+logflare`, `imgproxy` and `functions`). Hopefully either the `bitnami` chart will eventually include the missing features (don't hold your breath!) or the [`supabase-community`](https://github.com/supabase-community/supabase-kubernetes/) chart will eventually evolve to support multi-node deployments.
 
 This project exists AS AN EXAMPLE usage of the technologies, and has no tests. This is, of course, bad. It has bugs but many such example projects do. If you find any and care, please submit fixes!
 
 ## Requirements
 
-This system has been tested on Ubuntu 24.04 but should work on Ubuntu 22.04, either as a host or in Windows WSL2. It may work on other systems.
+This system has been tested on Ubuntu 24.04 but should work on Ubuntu 22.04, either as a host or in Windows WSL2. It may work on other systems but they are not officially "supported".
 
 You must have [`docker`](https://docs.docker.com/engine/install/ubuntu/) (26.1+, only tested with a normal install, not tested with Docker Desktop), [`k3d`](https://k3d.io/) (5.6+), [`kubectl`](https://github.com/kubernetes/kubectl) (1.29+), [`helm`](https://helm.sh/) (3.14+) and [`node`](https://nodejs.org/en) (20.12+) and [`pnpm`](https://pnpm.io/) (9+) installed in their latest versions as of April 2024 and available in your `PATH`. The maintainer uses [`asdf`](https://asdf-vm.com/) (0.14+) for managing node versions but any supported installation method should also work. The maintainer activates/installs `pnpm` via `corepack enable`.
 
@@ -21,13 +22,18 @@ You also need `ca-certificates`, `libnss3-tools`, `libnss-myhostname` and `mkcer
 
 ## Installation
 
+### Prerequisites
+
+You should be able to install all the the required tools and libraries onto a fresh WSL2 Ubuntu 24.04 (make sure you install from the MS Store using `Ubuntu 24.04 LTS`) using the script provided in `scripts/install.wsl.2404.sh`. If you want to set up a non-fresh install, then you should be able to take out parts you don't strictly need (like `asdf`/`node`, `neovim`, `wireguard`, etc.) but they are all pretty standard tools/libs and shouldn't hurt to have them for admin/dev (if you don't have them already!). You should definitely make sure you have everything installed before claiming something "doesn't work"! It _might_ work if you try and adapt to `npm` or `yarn` but that is definitely never going to be officially "supported".
+
 ### Helm chart
 
 Assuming you do your dev in `~/dev`:
 
 ```
-git clone git@github.com:AntonOfTheWoods/magnetic.git ~/dev/magnetic
+git clone git@github.com:supafull/magnetic.git ~/dev/magnetic
 cd ~/dev/magnetic
+helm dependency build kube/chart/magnetic/
 bash kube/k3d-deploy/k3d-create-cluster.sh && bash kube/k3d-deploy/kubectl-create-secret.sh
 bash build-all-push-deploy-local.sh
 ```
@@ -38,24 +44,25 @@ You can check the state of the pods with:
 kubectl --kubeconfig ~/.kube/config.k3d get pods
 ```
 
-and any `kubectl`/`helm` commands to access the cluster should use `~/.kube/config.k3d` as the `kubeconfig`. You can obviously manage your `kubeconfig` as you see fit (via aliases, etc.), but the scripts will create/update that file, so be warned if you reinstall the `k3d` cluster - you will need to get the config from there again if you are not using that for your commands.
+and any `kubectl`/`helm` commands to access the cluster should use `~/.kube/config.k3d` as the `kubeconfig`. You can obviously manage your `kubeconfig` as you see fit (via aliases, etc.), but the scripts will create/update that specific file, so be warned if you reinstall the `k3d` cluster - you will need to get the config from there again if you are not using that for your commands.
 
 ### SSL Certificates
 
-The system uses `supabase.localhost`, `supabase-studio.localhost` and `magnetic.localhost` to access the various services locally by default, and you could easily add configuration to expose the `minio`.
+The system uses `supabase.localhost`, `supabase-studio.localhost` and `magnetic.localhost` to access the various services locally by default via `https`, and `minio` on `minio.localhost` via `http`.
 
-If you are on a Linux host, you should now be Ok - `mkcert` creates certificates in the right place. On Windows, you need to first allow the certificates generated by your `wsl2`. [Follow the instructions here](https://github.com/FiloSottile/mkcert/issues/357#issuecomment-1466762021) to enable this. Basically, you just need to open the certificate authority files in Windows and add them to your cert store, which the linked instructions will help you do.
+If you are on a Linux host, you should now be Ok - `mkcert` creates certificates in the right place. On Windows, you need to first allow the certificates generated by your `wsl2`. [Follow the instructions here](https://github.com/FiloSottile/mkcert/issues/357#issuecomment-1466762021) to enable this. Basically, you just need to open the certificate authority files in Windows and add them to your cert store, which the linked instructions will help you do. The script mentioned above will do this, and open an `explorer.exe` for you in the right place for easy double-clickage. At least look there for inpiration if you don't want to execute it.
 
 You will now be able to access your local sites with `https`, and install the PWA like a normal PWA, etc.
 
 ### Bootstrapping the database and starting the frontend.
 
-Once you have confirmed that all the kubernetes services have started correctly (via `kubectl --kubeconfig ~/.kube/config.k3d get pods`) and then logging in to `supabase-studio.localhost` to ensure `supabase` is working as expected.
+Once you have confirmed that all the kubernetes services have started correctly (via `kubectl --kubeconfig ~/.kube/config.k3d get pods`) and then accessing `supabase-studio.localhost` to ensure `supabase` is working as expected.
 
 You can then:
 
 ```bash
 cd ~/dev/magnetic/
+cp .env.example .env
 pnpm install
 pnpm db:migrate  # this will create the tables and electrify them
 pnpm db:seed  # this will create the CRM data values and supabase users
@@ -67,10 +74,14 @@ You can then start the frontend:
 
 ```bash
 cd ~/dev/magnetic/frontend
-pnpm install
-pnpm client:generate
-sed -i '1s;^;// @ts-nocheck\n;' src/generated/client/index.ts  # hopefully this won't be necessary soon!!!
+bash refresh-client.sh
 pnpm dev
 ```
 
-You can then go to `magnetic.localhost` and log in with `janedoe@atomic.dev`:`password`. You may need to `ctrl+r`/`ctrl+F5` in order to get the data after first login (this is a bug, and will get fixed!).
+You can then go to `magnetic.localhost` and log in with `janedoe@atomic.dev`:`a_good_password`. You may need to `ctrl+r`/`ctrl+F5` in order to get the data after first login to see the data (this is a bug, and will get fixed!).
+
+## Bugs and missing features
+
+The `supaplus` chart that installs `supabase` is very new and hasn't been fully tested or battle-hardened, so expect many rough edges.
+
+The original `ra-supabase` has lots of areas that appear to be bugs (because it was a copy/paste of the non-`supabase` version?) but only those that directly required fixing for basic `electric` support were fixed.
