@@ -23,6 +23,6 @@ export default defineConfig({
         "process.env.NODE_DEBUG": "false",
       },
     },
-    exclude: ["wa-sqlite"],
+    exclude: ["wa-sqlite", "@electric-sql/pglite"],
   },
 });

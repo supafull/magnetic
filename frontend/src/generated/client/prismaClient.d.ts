@@ -58,11 +58,11 @@ export type Contact_notes = {
    * @zod.string.uuid()
    */
   sales_id: string
-  status: string
   /**
    * @zod.string.uuid()
    */
   contact_id: string | null
+  status: string
 }
 
 /**
@@ -78,10 +78,6 @@ export type Contacts = {
   last_name: string
   gender: string | null
   title: string | null
-  /**
-   * @zod.string.uuid()
-   */
-  company_id: string
   email: string
   phone_number1: string | null
   phone_number2: string | null
@@ -92,11 +88,15 @@ export type Contacts = {
   last_seen: Date
   has_newsletter: boolean | null
   status: string
-  tags: Prisma.JsonValue | null
+  /**
+   * @zod.string.uuid()
+   */
+  company_id: string
   /**
    * @zod.string.uuid()
    */
   sales_id: string
+  tags: Prisma.JsonValue | null
 }
 
 /**
@@ -109,6 +109,7 @@ export type Deal_notes = {
    */
   id: string
   date: Date
+  type: string
   /**
    * @zod.string.uuid()
    */
@@ -117,7 +118,6 @@ export type Deal_notes = {
    * @zod.string.uuid()
    */
   sales_id: string
-  type: string
   text: string
 }
 
@@ -132,10 +132,6 @@ export type Deals = {
   id: string
   created_at: Date
   name: string
-  /**
-   * @zod.string.uuid()
-   */
-  company_id: string
   contact_ids: Prisma.JsonValue | null
   type: string
   stage: string
@@ -146,6 +142,10 @@ export type Deals = {
   amount: number
   updated_at: Date
   start_at: Date | null
+  /**
+   * @zod.string.uuid()
+   */
+  company_id: string
   /**
    * @zod.string.uuid()
    */
@@ -193,6 +193,7 @@ export type Tasks = {
    */
   id: string
   due_date: Date | null
+  text: string | null
   /**
    * @zod.string.uuid()
    */
@@ -201,7 +202,6 @@ export type Tasks = {
    * @zod.string.uuid()
    */
   sales_id: string | null
-  text: string | null
   type: string | null
 }
 
@@ -2425,8 +2425,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type: string | null
     text: string | null
     sales_id: string | null
-    status: string | null
     contact_id: string | null
+    status: string | null
   }
 
   export type Contact_notesMaxAggregateOutputType = {
@@ -2435,8 +2435,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type: string | null
     text: string | null
     sales_id: string | null
-    status: string | null
     contact_id: string | null
+    status: string | null
   }
 
   export type Contact_notesCountAggregateOutputType = {
@@ -2445,8 +2445,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type: number
     text: number
     sales_id: number
-    status: number
     contact_id: number
+    status: number
     _all: number
   }
 
@@ -2457,8 +2457,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: true
     text?: true
     sales_id?: true
-    status?: true
     contact_id?: true
+    status?: true
   }
 
   export type Contact_notesMaxAggregateInputType = {
@@ -2467,8 +2467,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: true
     text?: true
     sales_id?: true
-    status?: true
     contact_id?: true
+    status?: true
   }
 
   export type Contact_notesCountAggregateInputType = {
@@ -2477,8 +2477,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: true
     text?: true
     sales_id?: true
-    status?: true
     contact_id?: true
+    status?: true
     _all?: true
   }
 
@@ -2566,8 +2566,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type: string
     text: string
     sales_id: string
-    status: string
     contact_id: string | null
+    status: string
     _count: Contact_notesCountAggregateOutputType | null
     _min: Contact_notesMinAggregateOutputType | null
     _max: Contact_notesMaxAggregateOutputType | null
@@ -2593,8 +2593,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: boolean
     text?: boolean
     sales_id?: boolean
-    status?: boolean
     contact_id?: boolean
+    status?: boolean
     contacts?: boolean | ContactsArgs
     sales?: boolean | SalesArgs
   }
@@ -3435,7 +3435,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string | null
     gender: string | null
     title: string | null
-    company_id: string | null
     email: string | null
     phone_number1: string | null
     phone_number2: string | null
@@ -3446,6 +3445,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | null
     has_newsletter: boolean | null
     status: string | null
+    company_id: string | null
     sales_id: string | null
   }
 
@@ -3455,7 +3455,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string | null
     gender: string | null
     title: string | null
-    company_id: string | null
     email: string | null
     phone_number1: string | null
     phone_number2: string | null
@@ -3466,6 +3465,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | null
     has_newsletter: boolean | null
     status: string | null
+    company_id: string | null
     sales_id: string | null
   }
 
@@ -3475,7 +3475,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: number
     gender: number
     title: number
-    company_id: number
     email: number
     phone_number1: number
     phone_number2: number
@@ -3486,8 +3485,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: number
     has_newsletter: number
     status: number
-    tags: number
+    company_id: number
     sales_id: number
+    tags: number
     _all: number
   }
 
@@ -3498,7 +3498,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: true
     gender?: true
     title?: true
-    company_id?: true
     email?: true
     phone_number1?: true
     phone_number2?: true
@@ -3509,6 +3508,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: true
     has_newsletter?: true
     status?: true
+    company_id?: true
     sales_id?: true
   }
 
@@ -3518,7 +3518,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: true
     gender?: true
     title?: true
-    company_id?: true
     email?: true
     phone_number1?: true
     phone_number2?: true
@@ -3529,6 +3528,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: true
     has_newsletter?: true
     status?: true
+    company_id?: true
     sales_id?: true
   }
 
@@ -3538,7 +3538,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: true
     gender?: true
     title?: true
-    company_id?: true
     email?: true
     phone_number1?: true
     phone_number2?: true
@@ -3549,8 +3548,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: true
     has_newsletter?: true
     status?: true
-    tags?: true
+    company_id?: true
     sales_id?: true
+    tags?: true
     _all?: true
   }
 
@@ -3638,7 +3638,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string
     gender: string | null
     title: string | null
-    company_id: string
     email: string
     phone_number1: string | null
     phone_number2: string | null
@@ -3649,8 +3648,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date
     has_newsletter: boolean | null
     status: string
-    tags: JsonValue | null
+    company_id: string
     sales_id: string
+    tags: JsonValue | null
     _count: ContactsCountAggregateOutputType | null
     _min: ContactsMinAggregateOutputType | null
     _max: ContactsMaxAggregateOutputType | null
@@ -3676,7 +3676,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: boolean
     gender?: boolean
     title?: boolean
-    company_id?: boolean
     email?: boolean
     phone_number1?: boolean
     phone_number2?: boolean
@@ -3687,8 +3686,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: boolean
     has_newsletter?: boolean
     status?: boolean
-    tags?: boolean
+    company_id?: boolean
     sales_id?: boolean
+    tags?: boolean
     contact_notes?: boolean | Contacts$contact_notesArgs
     companies?: boolean | CompaniesArgs
     sales?: boolean | SalesArgs
@@ -4588,27 +4588,27 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesMinAggregateOutputType = {
     id: string | null
     date: Date | null
+    type: string | null
     deal_id: string | null
     sales_id: string | null
-    type: string | null
     text: string | null
   }
 
   export type Deal_notesMaxAggregateOutputType = {
     id: string | null
     date: Date | null
+    type: string | null
     deal_id: string | null
     sales_id: string | null
-    type: string | null
     text: string | null
   }
 
   export type Deal_notesCountAggregateOutputType = {
     id: number
     date: number
+    type: number
     deal_id: number
     sales_id: number
-    type: number
     text: number
     _all: number
   }
@@ -4617,27 +4617,27 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesMinAggregateInputType = {
     id?: true
     date?: true
+    type?: true
     deal_id?: true
     sales_id?: true
-    type?: true
     text?: true
   }
 
   export type Deal_notesMaxAggregateInputType = {
     id?: true
     date?: true
+    type?: true
     deal_id?: true
     sales_id?: true
-    type?: true
     text?: true
   }
 
   export type Deal_notesCountAggregateInputType = {
     id?: true
     date?: true
+    type?: true
     deal_id?: true
     sales_id?: true
-    type?: true
     text?: true
     _all?: true
   }
@@ -4723,9 +4723,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesGroupByOutputType = {
     id: string
     date: Date
+    type: string
     deal_id: string
     sales_id: string
-    type: string
     text: string
     _count: Deal_notesCountAggregateOutputType | null
     _min: Deal_notesMinAggregateOutputType | null
@@ -4749,9 +4749,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesSelect = {
     id?: boolean
     date?: boolean
+    type?: boolean
     deal_id?: boolean
     sales_id?: boolean
-    type?: boolean
     text?: boolean
     deals?: boolean | DealsArgs
     sales?: boolean | SalesArgs
@@ -5603,13 +5603,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: string | null
     created_at: Date | null
     name: string | null
-    company_id: string | null
     type: string | null
     stage: string | null
     description: string | null
     amount: number | null
     updated_at: Date | null
     start_at: Date | null
+    company_id: string | null
     sales_id: string | null
     anindex: number | null
   }
@@ -5618,13 +5618,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: string | null
     created_at: Date | null
     name: string | null
-    company_id: string | null
     type: string | null
     stage: string | null
     description: string | null
     amount: number | null
     updated_at: Date | null
     start_at: Date | null
+    company_id: string | null
     sales_id: string | null
     anindex: number | null
   }
@@ -5633,7 +5633,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: number
     created_at: number
     name: number
-    company_id: number
     contact_ids: number
     type: number
     stage: number
@@ -5641,6 +5640,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount: number
     updated_at: number
     start_at: number
+    company_id: number
     sales_id: number
     anindex: number
     _all: number
@@ -5661,13 +5661,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: true
     created_at?: true
     name?: true
-    company_id?: true
     type?: true
     stage?: true
     description?: true
     amount?: true
     updated_at?: true
     start_at?: true
+    company_id?: true
     sales_id?: true
     anindex?: true
   }
@@ -5676,13 +5676,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: true
     created_at?: true
     name?: true
-    company_id?: true
     type?: true
     stage?: true
     description?: true
     amount?: true
     updated_at?: true
     start_at?: true
+    company_id?: true
     sales_id?: true
     anindex?: true
   }
@@ -5691,7 +5691,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: true
     created_at?: true
     name?: true
-    company_id?: true
     contact_ids?: true
     type?: true
     stage?: true
@@ -5699,6 +5698,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: true
     updated_at?: true
     start_at?: true
+    company_id?: true
     sales_id?: true
     anindex?: true
     _all?: true
@@ -5800,7 +5800,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: string
     created_at: Date
     name: string
-    company_id: string
     contact_ids: JsonValue | null
     type: string
     stage: string
@@ -5808,6 +5807,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount: number
     updated_at: Date
     start_at: Date | null
+    company_id: string
     sales_id: string
     anindex: number
     _count: DealsCountAggregateOutputType | null
@@ -5835,7 +5835,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: boolean
     created_at?: boolean
     name?: boolean
-    company_id?: boolean
     contact_ids?: boolean
     type?: boolean
     stage?: boolean
@@ -5843,6 +5842,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: boolean
     updated_at?: boolean
     start_at?: boolean
+    company_id?: boolean
     sales_id?: boolean
     anindex?: boolean
     deal_notes?: boolean | Deals$deal_notesArgs
@@ -8780,27 +8780,27 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksMinAggregateOutputType = {
     id: string | null
     due_date: Date | null
+    text: string | null
     contact_id: string | null
     sales_id: string | null
-    text: string | null
     type: string | null
   }
 
   export type TasksMaxAggregateOutputType = {
     id: string | null
     due_date: Date | null
+    text: string | null
     contact_id: string | null
     sales_id: string | null
-    text: string | null
     type: string | null
   }
 
   export type TasksCountAggregateOutputType = {
     id: number
     due_date: number
+    text: number
     contact_id: number
     sales_id: number
-    text: number
     type: number
     _all: number
   }
@@ -8809,27 +8809,27 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksMinAggregateInputType = {
     id?: true
     due_date?: true
+    text?: true
     contact_id?: true
     sales_id?: true
-    text?: true
     type?: true
   }
 
   export type TasksMaxAggregateInputType = {
     id?: true
     due_date?: true
+    text?: true
     contact_id?: true
     sales_id?: true
-    text?: true
     type?: true
   }
 
   export type TasksCountAggregateInputType = {
     id?: true
     due_date?: true
+    text?: true
     contact_id?: true
     sales_id?: true
-    text?: true
     type?: true
     _all?: true
   }
@@ -8915,9 +8915,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksGroupByOutputType = {
     id: string
     due_date: Date | null
+    text: string | null
     contact_id: string | null
     sales_id: string | null
-    text: string | null
     type: string | null
     _count: TasksCountAggregateOutputType | null
     _min: TasksMinAggregateOutputType | null
@@ -8941,9 +8941,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksSelect = {
     id?: boolean
     due_date?: boolean
+    text?: boolean
     contact_id?: boolean
     sales_id?: boolean
-    text?: boolean
     type?: boolean
     contacts?: boolean | ContactsArgs
     sales?: boolean | SalesArgs
@@ -9801,8 +9801,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type: 'type',
     text: 'text',
     sales_id: 'sales_id',
-    status: 'status',
-    contact_id: 'contact_id'
+    contact_id: 'contact_id',
+    status: 'status'
   };
 
   export type Contact_notesScalarFieldEnum = (typeof Contact_notesScalarFieldEnum)[keyof typeof Contact_notesScalarFieldEnum]
@@ -9814,7 +9814,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: 'last_name',
     gender: 'gender',
     title: 'title',
-    company_id: 'company_id',
     email: 'email',
     phone_number1: 'phone_number1',
     phone_number2: 'phone_number2',
@@ -9825,8 +9824,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: 'last_seen',
     has_newsletter: 'has_newsletter',
     status: 'status',
-    tags: 'tags',
-    sales_id: 'sales_id'
+    company_id: 'company_id',
+    sales_id: 'sales_id',
+    tags: 'tags'
   };
 
   export type ContactsScalarFieldEnum = (typeof ContactsScalarFieldEnum)[keyof typeof ContactsScalarFieldEnum]
@@ -9835,9 +9835,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export const Deal_notesScalarFieldEnum: {
     id: 'id',
     date: 'date',
+    type: 'type',
     deal_id: 'deal_id',
     sales_id: 'sales_id',
-    type: 'type',
     text: 'text'
   };
 
@@ -9848,7 +9848,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: 'id',
     created_at: 'created_at',
     name: 'name',
-    company_id: 'company_id',
     contact_ids: 'contact_ids',
     type: 'type',
     stage: 'stage',
@@ -9856,6 +9855,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount: 'amount',
     updated_at: 'updated_at',
     start_at: 'start_at',
+    company_id: 'company_id',
     sales_id: 'sales_id',
     anindex: 'anindex'
   };
@@ -9918,9 +9918,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export const TasksScalarFieldEnum: {
     id: 'id',
     due_date: 'due_date',
+    text: 'text',
     contact_id: 'contact_id',
     sales_id: 'sales_id',
-    text: 'text',
     type: 'type'
   };
 
@@ -10040,8 +10040,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: StringFilter | string
     text?: StringFilter | string
     sales_id?: UuidFilter | string
-    status?: StringFilter | string
     contact_id?: UuidNullableFilter | string | null
+    status?: StringFilter | string
     contacts?: XOR<ContactsRelationFilter, ContactsWhereInput> | null
     sales?: XOR<SalesRelationFilter, SalesWhereInput>
   }
@@ -10052,8 +10052,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: SortOrder
     text?: SortOrder
     sales_id?: SortOrder
-    status?: SortOrder
     contact_id?: SortOrder
+    status?: SortOrder
     contacts?: ContactsOrderByWithRelationInput
     sales?: SalesOrderByWithRelationInput
   }
@@ -10068,8 +10068,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: SortOrder
     text?: SortOrder
     sales_id?: SortOrder
-    status?: SortOrder
     contact_id?: SortOrder
+    status?: SortOrder
     _count?: Contact_notesCountOrderByAggregateInput
     _max?: Contact_notesMaxOrderByAggregateInput
     _min?: Contact_notesMinOrderByAggregateInput
@@ -10084,8 +10084,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: StringWithAggregatesFilter | string
     text?: StringWithAggregatesFilter | string
     sales_id?: UuidWithAggregatesFilter | string
-    status?: StringWithAggregatesFilter | string
     contact_id?: UuidNullableWithAggregatesFilter | string | null
+    status?: StringWithAggregatesFilter | string
   }
 
   export type ContactsWhereInput = {
@@ -10097,7 +10097,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: StringFilter | string
     gender?: StringNullableFilter | string | null
     title?: StringNullableFilter | string | null
-    company_id?: UuidFilter | string
     email?: StringFilter | string
     phone_number1?: StringNullableFilter | string | null
     phone_number2?: StringNullableFilter | string | null
@@ -10108,8 +10107,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFilter | Date | string
     has_newsletter?: BoolNullableFilter | boolean | null
     status?: StringFilter | string
-    tags?: JsonNullableFilter
+    company_id?: UuidFilter | string
     sales_id?: UuidFilter | string
+    tags?: JsonNullableFilter
     contact_notes?: Contact_notesListRelationFilter
     companies?: XOR<CompaniesRelationFilter, CompaniesWhereInput>
     sales?: XOR<SalesRelationFilter, SalesWhereInput>
@@ -10122,7 +10122,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: SortOrder
     gender?: SortOrder
     title?: SortOrder
-    company_id?: SortOrder
     email?: SortOrder
     phone_number1?: SortOrder
     phone_number2?: SortOrder
@@ -10133,8 +10132,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: SortOrder
     has_newsletter?: SortOrder
     status?: SortOrder
-    tags?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
+    tags?: SortOrder
     contact_notes?: Contact_notesOrderByRelationAggregateInput
     companies?: CompaniesOrderByWithRelationInput
     sales?: SalesOrderByWithRelationInput
@@ -10151,7 +10151,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: SortOrder
     gender?: SortOrder
     title?: SortOrder
-    company_id?: SortOrder
     email?: SortOrder
     phone_number1?: SortOrder
     phone_number2?: SortOrder
@@ -10162,8 +10161,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: SortOrder
     has_newsletter?: SortOrder
     status?: SortOrder
-    tags?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
+    tags?: SortOrder
     _count?: ContactsCountOrderByAggregateInput
     _max?: ContactsMaxOrderByAggregateInput
     _min?: ContactsMinOrderByAggregateInput
@@ -10178,7 +10178,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: StringWithAggregatesFilter | string
     gender?: StringNullableWithAggregatesFilter | string | null
     title?: StringNullableWithAggregatesFilter | string | null
-    company_id?: UuidWithAggregatesFilter | string
     email?: StringWithAggregatesFilter | string
     phone_number1?: StringNullableWithAggregatesFilter | string | null
     phone_number2?: StringNullableWithAggregatesFilter | string | null
@@ -10189,8 +10188,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeWithAggregatesFilter | Date | string
     has_newsletter?: BoolNullableWithAggregatesFilter | boolean | null
     status?: StringWithAggregatesFilter | string
-    tags?: JsonNullableWithAggregatesFilter
+    company_id?: UuidWithAggregatesFilter | string
     sales_id?: UuidWithAggregatesFilter | string
+    tags?: JsonNullableWithAggregatesFilter
   }
 
   export type Deal_notesWhereInput = {
@@ -10199,9 +10199,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<Deal_notesWhereInput>
     id?: UuidFilter | string
     date?: DateTimeFilter | Date | string
+    type?: StringFilter | string
     deal_id?: UuidFilter | string
     sales_id?: UuidFilter | string
-    type?: StringFilter | string
     text?: StringFilter | string
     deals?: XOR<DealsRelationFilter, DealsWhereInput>
     sales?: XOR<SalesRelationFilter, SalesWhereInput>
@@ -10210,9 +10210,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesOrderByWithRelationInput = {
     id?: SortOrder
     date?: SortOrder
+    type?: SortOrder
     deal_id?: SortOrder
     sales_id?: SortOrder
-    type?: SortOrder
     text?: SortOrder
     deals?: DealsOrderByWithRelationInput
     sales?: SalesOrderByWithRelationInput
@@ -10225,9 +10225,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesOrderByWithAggregationInput = {
     id?: SortOrder
     date?: SortOrder
+    type?: SortOrder
     deal_id?: SortOrder
     sales_id?: SortOrder
-    type?: SortOrder
     text?: SortOrder
     _count?: Deal_notesCountOrderByAggregateInput
     _max?: Deal_notesMaxOrderByAggregateInput
@@ -10240,9 +10240,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<Deal_notesScalarWhereWithAggregatesInput>
     id?: UuidWithAggregatesFilter | string
     date?: DateTimeWithAggregatesFilter | Date | string
+    type?: StringWithAggregatesFilter | string
     deal_id?: UuidWithAggregatesFilter | string
     sales_id?: UuidWithAggregatesFilter | string
-    type?: StringWithAggregatesFilter | string
     text?: StringWithAggregatesFilter | string
   }
 
@@ -10253,7 +10253,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: UuidFilter | string
     created_at?: DateTimeFilter | Date | string
     name?: StringFilter | string
-    company_id?: UuidFilter | string
     contact_ids?: JsonNullableFilter
     type?: StringFilter | string
     stage?: StringFilter | string
@@ -10261,6 +10260,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: IntFilter | number
     updated_at?: DateTimeFilter | Date | string
     start_at?: DateTimeNullableFilter | Date | string | null
+    company_id?: UuidFilter | string
     sales_id?: UuidFilter | string
     anindex?: IntFilter | number
     deal_notes?: Deal_notesListRelationFilter
@@ -10272,7 +10272,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: SortOrder
     created_at?: SortOrder
     name?: SortOrder
-    company_id?: SortOrder
     contact_ids?: SortOrder
     type?: SortOrder
     stage?: SortOrder
@@ -10280,6 +10279,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: SortOrder
     updated_at?: SortOrder
     start_at?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
     anindex?: SortOrder
     deal_notes?: Deal_notesOrderByRelationAggregateInput
@@ -10295,7 +10295,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: SortOrder
     created_at?: SortOrder
     name?: SortOrder
-    company_id?: SortOrder
     contact_ids?: SortOrder
     type?: SortOrder
     stage?: SortOrder
@@ -10303,6 +10302,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: SortOrder
     updated_at?: SortOrder
     start_at?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
     anindex?: SortOrder
     _count?: DealsCountOrderByAggregateInput
@@ -10319,7 +10319,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: UuidWithAggregatesFilter | string
     created_at?: DateTimeWithAggregatesFilter | Date | string
     name?: StringWithAggregatesFilter | string
-    company_id?: UuidWithAggregatesFilter | string
     contact_ids?: JsonNullableWithAggregatesFilter
     type?: StringWithAggregatesFilter | string
     stage?: StringWithAggregatesFilter | string
@@ -10327,6 +10326,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: IntWithAggregatesFilter | number
     updated_at?: DateTimeWithAggregatesFilter | Date | string
     start_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
+    company_id?: UuidWithAggregatesFilter | string
     sales_id?: UuidWithAggregatesFilter | string
     anindex?: IntWithAggregatesFilter | number
   }
@@ -10427,9 +10427,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<TasksWhereInput>
     id?: UuidFilter | string
     due_date?: DateTimeNullableFilter | Date | string | null
+    text?: StringNullableFilter | string | null
     contact_id?: UuidNullableFilter | string | null
     sales_id?: UuidNullableFilter | string | null
-    text?: StringNullableFilter | string | null
     type?: StringNullableFilter | string | null
     contacts?: XOR<ContactsRelationFilter, ContactsWhereInput> | null
     sales?: XOR<SalesRelationFilter, SalesWhereInput> | null
@@ -10438,9 +10438,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksOrderByWithRelationInput = {
     id?: SortOrder
     due_date?: SortOrder
+    text?: SortOrder
     contact_id?: SortOrder
     sales_id?: SortOrder
-    text?: SortOrder
     type?: SortOrder
     contacts?: ContactsOrderByWithRelationInput
     sales?: SalesOrderByWithRelationInput
@@ -10453,9 +10453,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksOrderByWithAggregationInput = {
     id?: SortOrder
     due_date?: SortOrder
+    text?: SortOrder
     contact_id?: SortOrder
     sales_id?: SortOrder
-    text?: SortOrder
     type?: SortOrder
     _count?: TasksCountOrderByAggregateInput
     _max?: TasksMaxOrderByAggregateInput
@@ -10468,9 +10468,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<TasksScalarWhereWithAggregatesInput>
     id?: UuidWithAggregatesFilter | string
     due_date?: DateTimeNullableWithAggregatesFilter | Date | string | null
+    text?: StringNullableWithAggregatesFilter | string | null
     contact_id?: UuidNullableWithAggregatesFilter | string | null
     sales_id?: UuidNullableWithAggregatesFilter | string | null
-    text?: StringNullableWithAggregatesFilter | string | null
     type?: StringNullableWithAggregatesFilter | string | null
   }
 
@@ -10616,8 +10616,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type: string
     text: string
     sales_id: string
-    status: string
     contact_id?: string | null
+    status: string
   }
 
   export type Contact_notesUpdateInput = {
@@ -10636,8 +10636,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
     contact_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type Contact_notesCreateManyInput = {
@@ -10646,8 +10646,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type: string
     text: string
     sales_id: string
-    status: string
     contact_id?: string | null
+    status: string
   }
 
   export type Contact_notesUpdateManyMutationInput = {
@@ -10664,8 +10664,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
     contact_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type ContactsCreateInput = {
@@ -10697,7 +10697,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string
     gender?: string | null
     title?: string | null
-    company_id: string
     email: string
     phone_number1?: string | null
     phone_number2?: string | null
@@ -10708,8 +10707,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | string
     has_newsletter?: boolean | null
     status: string
-    tags?: NullableJsonNullValueInput | InputJsonValue
+    company_id: string
     sales_id: string
+    tags?: NullableJsonNullValueInput | InputJsonValue
     contact_notes?: Contact_notesUncheckedCreateNestedManyWithoutContactsInput
     tasks?: TasksUncheckedCreateNestedManyWithoutContactsInput
   }
@@ -10743,7 +10743,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: StringFieldUpdateOperationsInput | string
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
-    company_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone_number1?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10754,8 +10753,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
     status?: StringFieldUpdateOperationsInput | string
-    tags?: NullableJsonNullValueInput | InputJsonValue
+    company_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
+    tags?: NullableJsonNullValueInput | InputJsonValue
     contact_notes?: Contact_notesUncheckedUpdateManyWithoutContactsNestedInput
     tasks?: TasksUncheckedUpdateManyWithoutContactsNestedInput
   }
@@ -10766,7 +10766,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string
     gender?: string | null
     title?: string | null
-    company_id: string
     email: string
     phone_number1?: string | null
     phone_number2?: string | null
@@ -10777,8 +10776,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | string
     has_newsletter?: boolean | null
     status: string
-    tags?: NullableJsonNullValueInput | InputJsonValue
+    company_id: string
     sales_id: string
+    tags?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ContactsUpdateManyMutationInput = {
@@ -10806,7 +10806,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: StringFieldUpdateOperationsInput | string
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
-    company_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone_number1?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10817,8 +10816,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
     status?: StringFieldUpdateOperationsInput | string
-    tags?: NullableJsonNullValueInput | InputJsonValue
+    company_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
+    tags?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type Deal_notesCreateInput = {
@@ -10833,9 +10833,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesUncheckedCreateInput = {
     id: string
     date: Date | string
+    type: string
     deal_id: string
     sales_id: string
-    type: string
     text: string
   }
 
@@ -10851,18 +10851,18 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: StringFieldUpdateOperationsInput | string
     deal_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
   }
 
   export type Deal_notesCreateManyInput = {
     id: string
     date: Date | string
+    type: string
     deal_id: string
     sales_id: string
-    type: string
     text: string
   }
 
@@ -10876,9 +10876,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: StringFieldUpdateOperationsInput | string
     deal_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
   }
 
@@ -10903,7 +10903,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: string
     created_at: Date | string
     name: string
-    company_id: string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type: string
     stage: string
@@ -10911,6 +10910,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount: number
     updated_at: Date | string
     start_at?: Date | string | null
+    company_id: string
     sales_id: string
     anindex: number
     deal_notes?: Deal_notesUncheckedCreateNestedManyWithoutDealsInput
@@ -10937,7 +10937,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
-    company_id?: StringFieldUpdateOperationsInput | string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type?: StringFieldUpdateOperationsInput | string
     stage?: StringFieldUpdateOperationsInput | string
@@ -10945,6 +10944,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: IntFieldUpdateOperationsInput | number
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    company_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
     anindex?: IntFieldUpdateOperationsInput | number
     deal_notes?: Deal_notesUncheckedUpdateManyWithoutDealsNestedInput
@@ -10954,7 +10954,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: string
     created_at: Date | string
     name: string
-    company_id: string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type: string
     stage: string
@@ -10962,6 +10961,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount: number
     updated_at: Date | string
     start_at?: Date | string | null
+    company_id: string
     sales_id: string
     anindex: number
   }
@@ -10984,7 +10984,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
-    company_id?: StringFieldUpdateOperationsInput | string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type?: StringFieldUpdateOperationsInput | string
     stage?: StringFieldUpdateOperationsInput | string
@@ -10992,6 +10991,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: IntFieldUpdateOperationsInput | number
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    company_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
     anindex?: IntFieldUpdateOperationsInput | number
   }
@@ -11123,9 +11123,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksUncheckedCreateInput = {
     id: string
     due_date?: Date | string | null
+    text?: string | null
     contact_id?: string | null
     sales_id?: string | null
-    text?: string | null
     type?: string | null
   }
 
@@ -11141,18 +11141,18 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    text?: NullableStringFieldUpdateOperationsInput | string | null
     contact_id?: NullableStringFieldUpdateOperationsInput | string | null
     sales_id?: NullableStringFieldUpdateOperationsInput | string | null
-    text?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TasksCreateManyInput = {
     id: string
     due_date?: Date | string | null
+    text?: string | null
     contact_id?: string | null
     sales_id?: string | null
-    text?: string | null
     type?: string | null
   }
 
@@ -11166,9 +11166,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    text?: NullableStringFieldUpdateOperationsInput | string | null
     contact_id?: NullableStringFieldUpdateOperationsInput | string | null
     sales_id?: NullableStringFieldUpdateOperationsInput | string | null
-    text?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -11391,8 +11391,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: SortOrder
     text?: SortOrder
     sales_id?: SortOrder
-    status?: SortOrder
     contact_id?: SortOrder
+    status?: SortOrder
   }
 
   export type Contact_notesMaxOrderByAggregateInput = {
@@ -11401,8 +11401,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: SortOrder
     text?: SortOrder
     sales_id?: SortOrder
-    status?: SortOrder
     contact_id?: SortOrder
+    status?: SortOrder
   }
 
   export type Contact_notesMinOrderByAggregateInput = {
@@ -11411,8 +11411,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: SortOrder
     text?: SortOrder
     sales_id?: SortOrder
-    status?: SortOrder
     contact_id?: SortOrder
+    status?: SortOrder
   }
 
   export type UuidNullableWithAggregatesFilter = {
@@ -11503,7 +11503,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: SortOrder
     gender?: SortOrder
     title?: SortOrder
-    company_id?: SortOrder
     email?: SortOrder
     phone_number1?: SortOrder
     phone_number2?: SortOrder
@@ -11514,8 +11513,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: SortOrder
     has_newsletter?: SortOrder
     status?: SortOrder
-    tags?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
+    tags?: SortOrder
   }
 
   export type ContactsMaxOrderByAggregateInput = {
@@ -11524,7 +11524,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: SortOrder
     gender?: SortOrder
     title?: SortOrder
-    company_id?: SortOrder
     email?: SortOrder
     phone_number1?: SortOrder
     phone_number2?: SortOrder
@@ -11535,6 +11534,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: SortOrder
     has_newsletter?: SortOrder
     status?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
   }
 
@@ -11544,7 +11544,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: SortOrder
     gender?: SortOrder
     title?: SortOrder
-    company_id?: SortOrder
     email?: SortOrder
     phone_number1?: SortOrder
     phone_number2?: SortOrder
@@ -11555,6 +11554,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: SortOrder
     has_newsletter?: SortOrder
     status?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
   }
 
@@ -11617,27 +11617,27 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesCountOrderByAggregateInput = {
     id?: SortOrder
     date?: SortOrder
+    type?: SortOrder
     deal_id?: SortOrder
     sales_id?: SortOrder
-    type?: SortOrder
     text?: SortOrder
   }
 
   export type Deal_notesMaxOrderByAggregateInput = {
     id?: SortOrder
     date?: SortOrder
+    type?: SortOrder
     deal_id?: SortOrder
     sales_id?: SortOrder
-    type?: SortOrder
     text?: SortOrder
   }
 
   export type Deal_notesMinOrderByAggregateInput = {
     id?: SortOrder
     date?: SortOrder
+    type?: SortOrder
     deal_id?: SortOrder
     sales_id?: SortOrder
-    type?: SortOrder
     text?: SortOrder
   }
 
@@ -11666,7 +11666,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: SortOrder
     created_at?: SortOrder
     name?: SortOrder
-    company_id?: SortOrder
     contact_ids?: SortOrder
     type?: SortOrder
     stage?: SortOrder
@@ -11674,6 +11673,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: SortOrder
     updated_at?: SortOrder
     start_at?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
     anindex?: SortOrder
   }
@@ -11687,13 +11687,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: SortOrder
     created_at?: SortOrder
     name?: SortOrder
-    company_id?: SortOrder
     type?: SortOrder
     stage?: SortOrder
     description?: SortOrder
     amount?: SortOrder
     updated_at?: SortOrder
     start_at?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
     anindex?: SortOrder
   }
@@ -11702,13 +11702,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: SortOrder
     created_at?: SortOrder
     name?: SortOrder
-    company_id?: SortOrder
     type?: SortOrder
     stage?: SortOrder
     description?: SortOrder
     amount?: SortOrder
     updated_at?: SortOrder
     start_at?: SortOrder
+    company_id?: SortOrder
     sales_id?: SortOrder
     anindex?: SortOrder
   }
@@ -11784,27 +11784,27 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksCountOrderByAggregateInput = {
     id?: SortOrder
     due_date?: SortOrder
+    text?: SortOrder
     contact_id?: SortOrder
     sales_id?: SortOrder
-    text?: SortOrder
     type?: SortOrder
   }
 
   export type TasksMaxOrderByAggregateInput = {
     id?: SortOrder
     due_date?: SortOrder
+    text?: SortOrder
     contact_id?: SortOrder
     sales_id?: SortOrder
-    text?: SortOrder
     type?: SortOrder
   }
 
   export type TasksMinOrderByAggregateInput = {
     id?: SortOrder
     due_date?: SortOrder
+    text?: SortOrder
     contact_id?: SortOrder
     sales_id?: SortOrder
-    text?: SortOrder
     type?: SortOrder
   }
 
@@ -12771,8 +12771,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | string
     has_newsletter?: boolean | null
     status: string
-    tags?: NullableJsonNullValueInput | InputJsonValue
     sales_id: string
+    tags?: NullableJsonNullValueInput | InputJsonValue
     contact_notes?: Contact_notesUncheckedCreateNestedManyWithoutContactsInput
     tasks?: TasksUncheckedCreateNestedManyWithoutContactsInput
   }
@@ -12883,7 +12883,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: StringFilter | string
     gender?: StringNullableFilter | string | null
     title?: StringNullableFilter | string | null
-    company_id?: UuidFilter | string
     email?: StringFilter | string
     phone_number1?: StringNullableFilter | string | null
     phone_number2?: StringNullableFilter | string | null
@@ -12894,8 +12893,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFilter | Date | string
     has_newsletter?: BoolNullableFilter | boolean | null
     status?: StringFilter | string
-    tags?: JsonNullableFilter
+    company_id?: UuidFilter | string
     sales_id?: UuidFilter | string
+    tags?: JsonNullableFilter
   }
 
   export type DealsUpsertWithWhereUniqueWithoutCompaniesInput = {
@@ -12921,7 +12921,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: UuidFilter | string
     created_at?: DateTimeFilter | Date | string
     name?: StringFilter | string
-    company_id?: UuidFilter | string
     contact_ids?: JsonNullableFilter
     type?: StringFilter | string
     stage?: StringFilter | string
@@ -12929,6 +12928,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: IntFilter | number
     updated_at?: DateTimeFilter | Date | string
     start_at?: DateTimeNullableFilter | Date | string | null
+    company_id?: UuidFilter | string
     sales_id?: UuidFilter | string
     anindex?: IntFilter | number
   }
@@ -12961,7 +12961,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string
     gender?: string | null
     title?: string | null
-    company_id: string
     email: string
     phone_number1?: string | null
     phone_number2?: string | null
@@ -12972,8 +12971,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | string
     has_newsletter?: boolean | null
     status: string
-    tags?: NullableJsonNullValueInput | InputJsonValue
+    company_id: string
     sales_id: string
+    tags?: NullableJsonNullValueInput | InputJsonValue
     tasks?: TasksUncheckedCreateNestedManyWithoutContactsInput
   }
 
@@ -13044,7 +13044,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: StringFieldUpdateOperationsInput | string
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
-    company_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone_number1?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13055,8 +13054,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
     status?: StringFieldUpdateOperationsInput | string
-    tags?: NullableJsonNullValueInput | InputJsonValue
+    company_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
+    tags?: NullableJsonNullValueInput | InputJsonValue
     tasks?: TasksUncheckedUpdateManyWithoutContactsNestedInput
   }
 
@@ -13198,8 +13198,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksUncheckedCreateWithoutContactsInput = {
     id: string
     due_date?: Date | string | null
-    sales_id?: string | null
     text?: string | null
+    sales_id?: string | null
     type?: string | null
   }
 
@@ -13238,8 +13238,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     type?: StringFilter | string
     text?: StringFilter | string
     sales_id?: UuidFilter | string
-    status?: StringFilter | string
     contact_id?: UuidNullableFilter | string | null
+    status?: StringFilter | string
   }
 
   export type CompaniesUpsertWithoutContactsInput = {
@@ -13334,9 +13334,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<TasksScalarWhereInput>
     id?: UuidFilter | string
     due_date?: DateTimeNullableFilter | Date | string | null
+    text?: StringNullableFilter | string | null
     contact_id?: UuidNullableFilter | string | null
     sales_id?: UuidNullableFilter | string | null
-    text?: StringNullableFilter | string | null
     type?: StringNullableFilter | string | null
   }
 
@@ -13360,7 +13360,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: string
     created_at: Date | string
     name: string
-    company_id: string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type: string
     stage: string
@@ -13368,6 +13367,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount: number
     updated_at: Date | string
     start_at?: Date | string | null
+    company_id: string
     sales_id: string
     anindex: number
   }
@@ -13431,7 +13431,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
-    company_id?: StringFieldUpdateOperationsInput | string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type?: StringFieldUpdateOperationsInput | string
     stage?: StringFieldUpdateOperationsInput | string
@@ -13439,6 +13438,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: IntFieldUpdateOperationsInput | number
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    company_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
     anindex?: IntFieldUpdateOperationsInput | number
   }
@@ -13483,8 +13483,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesUncheckedCreateWithoutDealsInput = {
     id: string
     date: Date | string
-    sales_id: string
     type: string
+    sales_id: string
     text: string
   }
 
@@ -13590,9 +13590,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<Deal_notesScalarWhereInput>
     id?: UuidFilter | string
     date?: DateTimeFilter | Date | string
+    type?: StringFilter | string
     deal_id?: UuidFilter | string
     sales_id?: UuidFilter | string
-    type?: StringFilter | string
     text?: StringFilter | string
   }
 
@@ -13726,8 +13726,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     date: Date | string
     type: string
     text: string
-    status: string
     contact_id?: string | null
+    status: string
   }
 
   export type Contact_notesCreateOrConnectWithoutSalesInput = {
@@ -13768,7 +13768,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string
     gender?: string | null
     title?: string | null
-    company_id: string
     email: string
     phone_number1?: string | null
     phone_number2?: string | null
@@ -13779,6 +13778,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | string
     has_newsletter?: boolean | null
     status: string
+    company_id: string
     tags?: NullableJsonNullValueInput | InputJsonValue
     contact_notes?: Contact_notesUncheckedCreateNestedManyWithoutContactsInput
     tasks?: TasksUncheckedCreateNestedManyWithoutContactsInput
@@ -13805,8 +13805,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesUncheckedCreateWithoutSalesInput = {
     id: string
     date: Date | string
-    deal_id: string
     type: string
+    deal_id: string
     text: string
   }
 
@@ -13840,7 +13840,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: string
     created_at: Date | string
     name: string
-    company_id: string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type: string
     stage: string
@@ -13848,6 +13847,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount: number
     updated_at: Date | string
     start_at?: Date | string | null
+    company_id: string
     anindex: number
     deal_notes?: Deal_notesUncheckedCreateNestedManyWithoutDealsInput
   }
@@ -13873,8 +13873,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksUncheckedCreateWithoutSalesInput = {
     id: string
     due_date?: Date | string | null
-    contact_id?: string | null
     text?: string | null
+    contact_id?: string | null
     type?: string | null
   }
 
@@ -14032,7 +14032,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string
     gender?: string | null
     title?: string | null
-    company_id: string
     email: string
     phone_number1?: string | null
     phone_number2?: string | null
@@ -14043,8 +14042,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | string
     has_newsletter?: boolean | null
     status: string
-    tags?: NullableJsonNullValueInput | InputJsonValue
+    company_id: string
     sales_id: string
+    tags?: NullableJsonNullValueInput | InputJsonValue
     contact_notes?: Contact_notesUncheckedCreateNestedManyWithoutContactsInput
   }
 
@@ -14115,7 +14115,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: StringFieldUpdateOperationsInput | string
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
-    company_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone_number1?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14126,8 +14125,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
     status?: StringFieldUpdateOperationsInput | string
-    tags?: NullableJsonNullValueInput | InputJsonValue
+    company_id?: StringFieldUpdateOperationsInput | string
     sales_id?: StringFieldUpdateOperationsInput | string
+    tags?: NullableJsonNullValueInput | InputJsonValue
     contact_notes?: Contact_notesUncheckedUpdateManyWithoutContactsNestedInput
   }
 
@@ -14176,8 +14176,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | string
     has_newsletter?: boolean | null
     status: string
-    tags?: NullableJsonNullValueInput | InputJsonValue
     sales_id: string
+    tags?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DealsCreateManyCompaniesInput = {
@@ -14233,8 +14233,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
     status?: StringFieldUpdateOperationsInput | string
-    tags?: NullableJsonNullValueInput | InputJsonValue
     sales_id?: StringFieldUpdateOperationsInput | string
+    tags?: NullableJsonNullValueInput | InputJsonValue
     contact_notes?: Contact_notesUncheckedUpdateManyWithoutContactsNestedInput
     tasks?: TasksUncheckedUpdateManyWithoutContactsNestedInput
   }
@@ -14255,8 +14255,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
     status?: StringFieldUpdateOperationsInput | string
-    tags?: NullableJsonNullValueInput | InputJsonValue
     sales_id?: StringFieldUpdateOperationsInput | string
+    tags?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DealsUpdateWithoutCompaniesInput = {
@@ -14318,8 +14318,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksCreateManyContactsInput = {
     id: string
     due_date?: Date | string | null
-    sales_id?: string | null
     text?: string | null
+    sales_id?: string | null
     type?: string | null
   }
 
@@ -14361,24 +14361,24 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksUncheckedUpdateWithoutContactsInput = {
     id?: StringFieldUpdateOperationsInput | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    sales_id?: NullableStringFieldUpdateOperationsInput | string | null
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    sales_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TasksUncheckedUpdateManyWithoutTasksInput = {
     id?: StringFieldUpdateOperationsInput | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    sales_id?: NullableStringFieldUpdateOperationsInput | string | null
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    sales_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type Deal_notesCreateManyDealsInput = {
     id: string
     date: Date | string
-    sales_id: string
     type: string
+    sales_id: string
     text: string
   }
 
@@ -14393,16 +14393,16 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesUncheckedUpdateWithoutDealsInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    sales_id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    sales_id?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
   }
 
   export type Deal_notesUncheckedUpdateManyWithoutDeal_notesInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    sales_id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    sales_id?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
   }
 
@@ -14427,8 +14427,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     date: Date | string
     type: string
     text: string
-    status: string
     contact_id?: string | null
+    status: string
   }
 
   export type ContactsCreateManySalesInput = {
@@ -14437,7 +14437,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name: string
     gender?: string | null
     title?: string | null
-    company_id: string
     email: string
     phone_number1?: string | null
     phone_number2?: string | null
@@ -14448,14 +14447,15 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen: Date | string
     has_newsletter?: boolean | null
     status: string
+    company_id: string
     tags?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type Deal_notesCreateManySalesInput = {
     id: string
     date: Date | string
-    deal_id: string
     type: string
+    deal_id: string
     text: string
   }
 
@@ -14463,7 +14463,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id: string
     created_at: Date | string
     name: string
-    company_id: string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type: string
     stage: string
@@ -14471,14 +14470,15 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount: number
     updated_at: Date | string
     start_at?: Date | string | null
+    company_id: string
     anindex: number
   }
 
   export type TasksCreateManySalesInput = {
     id: string
     due_date?: Date | string | null
-    contact_id?: string | null
     text?: string | null
+    contact_id?: string | null
     type?: string | null
   }
 
@@ -14548,8 +14548,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
     contact_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type ContactsUpdateWithoutSalesInput = {
@@ -14580,7 +14580,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_name?: StringFieldUpdateOperationsInput | string
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
-    company_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone_number1?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14591,6 +14590,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
     status?: StringFieldUpdateOperationsInput | string
+    company_id?: StringFieldUpdateOperationsInput | string
     tags?: NullableJsonNullValueInput | InputJsonValue
     contact_notes?: Contact_notesUncheckedUpdateManyWithoutContactsNestedInput
     tasks?: TasksUncheckedUpdateManyWithoutContactsNestedInput
@@ -14607,8 +14607,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Deal_notesUncheckedUpdateWithoutSalesInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    deal_id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    deal_id?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
   }
 
@@ -14632,7 +14632,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
-    company_id?: StringFieldUpdateOperationsInput | string
     contact_ids?: NullableJsonNullValueInput | InputJsonValue
     type?: StringFieldUpdateOperationsInput | string
     stage?: StringFieldUpdateOperationsInput | string
@@ -14640,6 +14639,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     amount?: IntFieldUpdateOperationsInput | number
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     start_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    company_id?: StringFieldUpdateOperationsInput | string
     anindex?: IntFieldUpdateOperationsInput | number
     deal_notes?: Deal_notesUncheckedUpdateManyWithoutDealsNestedInput
   }
@@ -14655,8 +14655,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TasksUncheckedUpdateWithoutSalesInput = {
     id?: StringFieldUpdateOperationsInput | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contact_id?: NullableStringFieldUpdateOperationsInput | string | null
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    contact_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableStringFieldUpdateOperationsInput | string | null
   }
 

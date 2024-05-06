@@ -2,4 +2,7 @@
 
 pnpm install
 pnpm client:generate
-sed -i '1s;^;// @ts-nocheck\n;' src/generated/client/index.ts  # hopefully this won't be necessary soon!!!
+
+cp --update=none .env.example .env
+
+sed -i 's/GRANT [^"]*//g' src/generated/client/pg-migrations.ts  # hopefully this won't be necessary soon!!!

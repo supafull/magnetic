@@ -119,7 +119,7 @@ electric:
   pgProxySecretName: electric-pg-proxy
   image:
     repository: electricsql/electric
-    tag: latest
+    tag: 0.11.0
     pullPolicy: IfNotPresent
   podAnnotations: {}
   replicaCount: 1

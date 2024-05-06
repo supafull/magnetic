@@ -15,11 +15,7 @@ import { removeDupes } from "./frontend/src/utils";
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 dotenv.config();
 
-console.log(
-  "Seeding data...",
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+console.log("Seeding data...");
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL as string,

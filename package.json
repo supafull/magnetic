@@ -18,12 +18,12 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@supabase/supabase-js": "^2.42.1",
+    "@supabase/supabase-js": "^2.43.1",
     "@types/uuid": "^9.0.8",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "dotenv-flow": "^4.1.0",
-    "react-admin": "^4.16.15",
-    "tsx": "^4.7.2"
+    "react-admin": "^4.16.17",
+    "tsx": "^4.9.3"
   }
 }

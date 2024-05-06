@@ -1,5 +1,4 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { ElectricDatabase, electrify } from "electric-sql/wa-sqlite";
 import * as _ from "lodash-es";
 import {
   CreateParams,
@@ -17,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { schema } from "../generated/client";
 import { getSupabaseJWT } from "../utils";
+import { initElectric } from "./electric";
 
 type AnyParams =
   | GetListParams
@@ -31,14 +31,7 @@ type AnyParams =
 type ElectricDataProviderParams = {
   supabase: SupabaseClient;
 };
-const config = {
-  debug: false, //import.meta.env.DEV,
-  url: import.meta.env.VITE_ELECTRIC_URL,
-};
-
-const scopedDbName = `basic-0.10.1-hello.db`;
-const conn = await ElectricDatabase.init(scopedDbName, "");
-export const electric = await electrify(conn, schema, config);
+export let electric: any;
 
 type TableName = keyof typeof schema.tables;
 
@@ -70,7 +63,7 @@ export default function ElectricDataProvider(
   params: ElectricDataProviderParams
 ): DataProvider {
   const loaded = (async () => {
-    await electric.connect(await getSupabaseJWT(params.supabase));
+    electric = await initElectric(await getSupabaseJWT(params.supabase));
     // This is a simplification for now until we have "shapes"
     const tableSyncs = Object.keys(schema.tables).map((table) => {
       // @ts-ignore

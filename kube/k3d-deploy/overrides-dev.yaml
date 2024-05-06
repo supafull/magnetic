@@ -6,6 +6,11 @@ project:
     enabled: true
     enableDbNodePorts: true
 
+electric:
+  image:
+    tag: 0.11.0
+    # pullPolicy: Always
+
 frontend:
   ## Development using k3d and local python/TS code
   local:

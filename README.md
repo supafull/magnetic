@@ -68,7 +68,7 @@ pnpm db:migrate  # this will create the tables and electrify them
 pnpm db:seed  # this will create the CRM data values and supabase users
 ```
 
-These commands should finish with no visible errors, and you should now seem some tables and data in `supabase-studio.localhost`.
+These commands should finish with no visible errors, and you should now see some tables and data in `supabase-studio.localhost`.
 
 You can then start the frontend:
 
@@ -79,6 +79,9 @@ pnpm dev
 ```
 
 You can then go to `magnetic.localhost` and log in with `janedoe@atomic.dev`:`a_good_password`. You may need to `ctrl+r`/`ctrl+F5` in order to get the data after first login to see the data (this is a bug, and will get fixed!).
+
+#### pglite and wa-sqlite
+As of 2024-05-08 `electric-sql` has preliminary support for `pglite` as the client db, and that is now the default for this repo also. You can change between the two by editing the `frontend/.env` file (that gets created the first time you run `bash refresh-client.sh` above), then restarting `pnpm dev`.
 
 ## Bugs and missing features
 
