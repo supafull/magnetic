@@ -4,9 +4,9 @@ dependencies:
   version: 4.10.1
 - name: supaplus
   repository: https://supafull.github.io/helm-charts
-  version: 0.0.4
+  version: 0.0.5
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.19.1
-digest: sha256:05c32d0adb687d0fff8ad683417e5d7fec2ac91d6d5e2f1310b150e0fcbefe4b
-generated: "2024-04-29T21:35:50.2922274+08:00"
+  version: 2.19.2
+digest: sha256:7a385a03c510d88f9e79705902c5661f295ff84dc0c4ce6f2051db2af8b396f7
+generated: "2024-05-09T16:56:42.521318218+08:00"
