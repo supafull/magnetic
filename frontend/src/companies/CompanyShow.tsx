@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { formatDistance } from "date-fns";
+import { useLiveQuery } from "electric-sql/react";
 import { ChangeEvent, useState } from "react";
 import {
   RecordContextProvider,
@@ -31,8 +32,9 @@ import { Link as RouterLink } from "react-router-dom";
 import { Avatar } from "../contacts/Avatar";
 import { TagsList } from "../contacts/TagsList";
 import { stageNames } from "../deals/stages";
+import { Companies, Contacts, Deals } from "../generated/client";
 import { Status } from "../misc/Status";
-import { Company, Contact, Deal } from "../types";
+import { electric } from "../ra-data-electric";
 import { CompanyAside } from "./CompanyAside";
 import { LogoField } from "./LogoField";
 import { sizes } from "./sizes";
@@ -44,8 +46,16 @@ export const CompanyShow = () => (
 );
 
 const CompanyShowContent = () => {
-  const { record, isLoading } = useShowContext<Company>();
+  const { record, isLoading } = useShowContext<Companies>();
   const [tabValue, setTabValue] = useState(0);
+  // Highly contrived examples of using live queries
+  const { results: deals } = useLiveQuery(
+    electric.db.deals.liveMany({ where: { company_id: record?.id } })
+  );
+  const { results: contacts } = useLiveQuery(
+    electric.db.contacts.liveMany({ where: { company_id: record?.id } })
+  );
+
   const handleTabChange = (_: ChangeEvent<object>, newValue: number) => {
     setTabValue(newValue);
   };
@@ -71,21 +81,19 @@ const CompanyShowContent = () => {
               textColor="primary"
               onChange={handleTabChange}
             >
-              {record.nb_contacts && (
+              {contacts?.length && (
                 <Tab
                   label={
-                    record.nb_contacts === 1
+                    contacts?.length === 1
                       ? "1 Contact"
-                      : `${record.nb_contacts} Contacts`
+                      : `${contacts?.length} Contacts`
                   }
                 />
               )}
-              {record.nb_deals && (
+              {deals?.length && (
                 <Tab
                   label={
-                    record.nb_deals === 1
-                      ? "1 deal"
-                      : `${record.nb_deals} Deals`
+                    deals?.length === 1 ? "1 deal" : `${deals?.length} Deals`
                   }
                 />
               )}
@@ -140,7 +148,7 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const ContactsIterator = () => {
-  const { data: contacts, isLoading } = useListContext<Contact>();
+  const { data: contacts, isLoading } = useListContext<Contacts>();
   if (isLoading) return null;
 
   const now = Date.now();
@@ -189,7 +197,7 @@ const ContactsIterator = () => {
 };
 
 const CreateRelatedContactButton = () => {
-  const company = useRecordContext<Company>();
+  const company = useRecordContext<Companies>();
   return (
     <Button
       component={RouterLink}
@@ -206,7 +214,7 @@ const CreateRelatedContactButton = () => {
 };
 
 const DealsIterator = () => {
-  const { data: deals, isLoading } = useListContext<Deal>();
+  const { data: deals, isLoading } = useListContext<Deals>();
   if (isLoading) return null;
 
   const now = Date.now();

@@ -3,7 +3,7 @@ import { add } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 
 import { Db } from "./types";
-import { Deal } from "../../frontend/src/types";
+import { Deal } from "../../../frontend/src/types";
 import { randomDate } from "./utils";
 
 const type = [

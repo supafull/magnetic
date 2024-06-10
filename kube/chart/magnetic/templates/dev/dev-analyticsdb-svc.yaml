@@ -1,4 +1,4 @@
-{{- if and .Values.supaplus.analyticsdb.enabled .Values.project.local.enabled .Values.project.local.enableDbNodePorts -}}
+{{- if and .Values.supabase.analyticsdb.enabled .Values.project.local.enabled .Values.project.local.enableNodePorts -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,9 +12,10 @@ spec:
   ports:
   - name: nodeport-30433
     nodePort: 30433
-    port: 5432
+    port: {{ .Values.supabase.analyticsdb.primary.service.ports.postgresql }}
     protocol: TCP
-    targetPort: 5432
+    targetPort: {{ .Values.supabase.analyticsdb.containerPorts.postgresql }}
+
   selector:
     app.kubernetes.io/component: primary
     app.kubernetes.io/name: analyticsdb

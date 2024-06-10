@@ -27,7 +27,7 @@ spec:
         {{- include "project.electric.labels" . | nindent 8 }}
     spec:
       initContainers:
-        {{- include "supaplus.database.checkdbready" .Subcharts.supaplus | indent 8 }}
+        {{- include "supabase.database.checkdbready" .Subcharts.supabase | indent 8 }}
 
       containers:
       - name: electric
@@ -42,7 +42,7 @@ spec:
         - name: pg-proxy-tcp
           containerPort: {{ .Values.electric.application.listenPortPgProxy }}
         env:
-        {{- include "supaplus.database.envvars" .Subcharts.supaplus | indent 8 }}
+        {{- include "supabase.database.envvars" .Subcharts.supabase | indent 8 }}
 
         - name: DATABASE_URL
           value: "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"
@@ -65,7 +65,8 @@ spec:
           value: 'false'
         - name: ELECTRIC_USE_IPV6
           value: 'false'
-
+        - name: DATABASE_REQUIRE_SSL
+          value: 'false'
         - name: AUTH_JWT_ALG
           value: {{ .Values.electric.auth.jwtAlg | quote }}
 
@@ -75,11 +76,11 @@ spec:
             {{- if .Values.electric.auth.secretName }}
               name: {{ .Values.electric.auth.secretName }}
             {{- else }}
-              name: {{ include "supaplus.jwt.secretName" .Subcharts.supaplus }}
+              name: {{ include "supabase.jwt.secretName" .Subcharts.supabase }}
             {{- end }}
             {{- if .Values.electric.auth.secretKey }}
               key: {{ .Values.electric.auth.secretKey }}
             {{- else }}
-              key: {{ include "supaplus.jwt.secretKey" .Subcharts.supaplus }}
+              key: {{ include "supabase.jwt.secretKey" .Subcharts.supabase }}
             {{- end }}
 {{- end }}

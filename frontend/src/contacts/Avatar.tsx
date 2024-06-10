@@ -1,13 +1,16 @@
 import { Avatar as MuiAvatar } from "@mui/material";
 import { useRecordContext } from "react-admin";
 
-import { Contact } from "../types";
+import { Contacts } from "../generated/client";
+import useImageSource from "../misc/ImageSource";
 
-export const Avatar = (props: { record?: Contact }) => {
-  const record = useRecordContext<Contact>(props);
+export const Avatar = (props: { record?: Contacts }) => {
+  const record = useRecordContext<Contacts>(props);
+  const logoSrc = useImageSource(record);
   if (!record) return null;
+
   return (
-    <MuiAvatar src={record.avatar}>
+    <MuiAvatar src={logoSrc}>
       {record.first_name.charAt(0)}
       {record.last_name.charAt(0)}
     </MuiAvatar>

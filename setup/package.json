@@ -1,6 +1,6 @@
 {
-  "name": "magnetic",
-  "version": "0.0.1",
+  "name": "magnetic-setup",
+  "version": "0.0.2",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,12 +18,13 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@supabase/supabase-js": "^2.43.1",
+    "@supabase/supabase-js": "^2.43.4",
     "@types/uuid": "^9.0.8",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "dotenv-flow": "^4.1.0",
-    "react-admin": "^4.16.17",
-    "tsx": "^4.9.3"
-  }
+    "react-admin": "^4.16.18",
+    "tsx": "^4.15.1"
+  },
+  "packageManager": "pnpm@9.3.0+sha512.ee7b93e0c2bd11409c6424f92b866f31d3ea1bef5fbe47d3c7500cdc3c9668833d2e55681ad66df5b640c61fa9dc25d546efa54d76d7f8bf54b13614ac293631"
 }

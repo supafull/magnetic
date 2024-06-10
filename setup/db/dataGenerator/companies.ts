@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker/locale/en_US";
 import { v4 as uuidv4 } from "uuid";
 
-import { Company } from "../../frontend/src/types";
+import { Company } from "../../../frontend/src/types";
 import { Db } from "./types";
 import { JANE_DOE, randomDate } from "./utils";
 
@@ -29,7 +29,7 @@ export function generateCompanies(db: Pick<Db, "sales">): Company[] {
     return {
       id,
       name: name,
-      logo: `/logos/${i}.png`,
+      logo: { src: `/logos/${i}.png`, title: name },
       sector: helpers.arrayElement(sectors),
       size: helpers.arrayElement(sizes) as 1 | 10 | 50 | 250 | 500,
       linked_in: `https://www.linkedin.com/company/${name

@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { Box, Link } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import { useGetList } from "react-admin";
-import { startOfMonth, format } from "date-fns";
+import { Box, Link } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
+import { format, startOfMonth } from "date-fns";
+import { useEffect, useState } from "react";
+import { useGetList } from "react-admin";
+import { Link as RouterLink } from "react-router-dom";
 
-import { Deal } from "../types";
+import { Deals } from "../generated/client";
 
 const multiplier = {
   opportunity: 0.2,
@@ -16,7 +16,7 @@ const multiplier = {
 };
 
 export const DealsChart = () => {
-  const { data, isLoading } = useGetList<Deal>("deals", {
+  const { data, isLoading } = useGetList<Deals>("deals", {
     pagination: { perPage: 100, page: 1 },
     sort: {
       field: "start_at",
@@ -42,21 +42,21 @@ export const DealsChart = () => {
       return {
         date: format(new Date(month), "MMM"),
         won: dealsByMonth[month]
-          .filter((deal: Deal) => deal.stage === "won")
-          .reduce((acc: number, deal: Deal) => {
+          .filter((deal: Deals) => deal.stage === "won")
+          .reduce((acc: number, deal: Deals) => {
             acc += deal.amount;
             return acc;
           }, 0),
         pending: dealsByMonth[month]
-          .filter((deal: Deal) => !["won", "lost"].includes(deal.stage))
-          .reduce((acc: number, deal: Deal) => {
+          .filter((deal: Deals) => !["won", "lost"].includes(deal.stage))
+          .reduce((acc: number, deal: Deals) => {
             const num = Number(deal.amount);
             acc += num * multiplier[deal.stage as keyof typeof multiplier];
             return acc;
           }, 0),
         lost: dealsByMonth[month]
-          .filter((deal: Deal) => deal.stage === "lost")
-          .reduce((acc: number, deal: Deal) => {
+          .filter((deal: Deals) => deal.stage === "lost")
+          .reduce((acc: number, deal: Deals) => {
             acc -= deal.amount;
             return acc;
           }, 0),

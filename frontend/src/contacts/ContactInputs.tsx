@@ -2,6 +2,8 @@ import { Box, Divider } from "@mui/material";
 import {
   AutocompleteInput,
   BooleanInput,
+  ImageField,
+  ImageInput,
   ReferenceInput,
   TextInput,
 } from "react-admin";
@@ -33,7 +35,9 @@ export const ContactInputs = () => {
       <Divider />
       <Box mt={2} width={430}>
         <TextInput source="background" multiline fullWidth />
-        <TextInput source="avatar" fullWidth />
+        <ImageInput source="avatar" label="Avatar">
+          <ImageField source="src" title="title" />
+        </ImageInput>
         <BooleanInput source="has_newsletter" />
       </Box>
     </Box>

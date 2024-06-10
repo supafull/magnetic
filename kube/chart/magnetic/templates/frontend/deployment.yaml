@@ -72,7 +72,7 @@ spec:
               value: "{{ $value }}"
             {{- end }}
 
-            {{ include "supaplus.database.envvars" .Subcharts.supaplus | nindent 12}}
+            {{ include "supabase.database.envvars" .Subcharts.supabase | nindent 12}}
 
             - name: SYSTEM_HOSTS
               value: {{ include "project.frontend.fullname" . }},{{ include "project.frontend.reallyFullname" . }}

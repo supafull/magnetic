@@ -27,8 +27,8 @@ import {
 } from "react-admin";
 import { Link } from "react-router-dom";
 
+import { Contacts } from "../generated/client";
 import { Status } from "../misc/Status";
-import { Contact } from "../types";
 import { Avatar } from "./Avatar";
 import { ContactListFilter } from "./ContactListFilter";
 import { TagsList } from "./TagsList";
@@ -39,7 +39,7 @@ const ContactListContent = () => {
     isLoading,
     onToggleItem,
     selectedIds,
-  } = useListContext<Contact>();
+  } = useListContext<Contacts>();
   if (isLoading) {
     return <SimpleListLoading hasLeftAvatarOrIcon hasSecondaryText />;
   }

@@ -4,7 +4,7 @@ description: A Kubernetes Helm Chart for installing magnetic
 version: 0.0.1
 keywords:
   - magnetic
-home: https://magnetic.example.com
+home: https://github.com/supafull/magnetic
 dependencies:
   - name: ingress-nginx
     alias: ingressnginx
@@ -12,10 +12,11 @@ dependencies:
     repository: https://kubernetes.github.io/ingress-nginx
     condition: ingressnginx.enabled
 
-  - name: supaplus
+  - name: supabase
     version: 0.0.x
     repository: https://supafull.github.io/helm-charts
-    condition: supaplus.enabled
+    # repository: file://../../../../helm-charts/charts/supabase
+    condition: supabase.enabled
 
   - name: common
     version: 2.x.x

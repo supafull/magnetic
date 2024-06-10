@@ -1,6 +1,8 @@
 import { LIB_VERSION } from "electric-sql/version";
 import { makeElectricContext } from "electric-sql/react";
 import { schema, Electric } from "../generated/client";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { getSupabaseJWT } from "../utils";
 
 export const { ElectricProvider, useElectric } =
   makeElectricContext<Electric>();
@@ -25,7 +27,8 @@ export let dbName: string;
 
 const config = {
   url: electricUrl,
-  debug: DEBUG,
+  // debug: DEBUG,
+  debug: false,
 };
 
 const initPGlite = async () => {
@@ -76,4 +79,30 @@ export async function initElectric(authToken: string) {
 
   window.electric = electric;
   return electric;
+}
+
+export async function bootstrapElectric(supabase: SupabaseClient) {
+  if (window.electric) {
+    return window.electric;
+  }
+  let jwt: string = "";
+  while (!jwt) {
+    try {
+      jwt = await getSupabaseJWT(supabase);
+    } catch (e) {
+      console.debug("Waiting for JWT", e);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+  const elec = await initElectric(jwt);
+  // Simply sync everything as an example
+  const tableSyncs = Object.keys(schema.tables).map((table) => {
+    // @ts-ignore
+    return elec.db[table].sync();
+  });
+  const syncs = await Promise.all(tableSyncs);
+  await Promise.all(
+    syncs.map((sync: { synced: Promise<undefined> }) => sync.synced)
+  );
+  return elec;
 }

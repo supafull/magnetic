@@ -8,8 +8,7 @@ import {
   useGetIdentity,
   useGetList,
 } from "react-admin";
-
-import { Contact as ContactType } from "../types";
+import { Contacts } from "../generated/client";
 
 export const LatestNotes = () => {
   const { identity } = useGetIdentity();
@@ -20,7 +19,7 @@ export const LatestNotes = () => {
       sort: { field: "date", order: "DESC" },
       filter: { sales_id: identity?.id },
     },
-    { enabled: Number.isInteger(identity?.id) },
+    { enabled: Number.isInteger(identity?.id) }
   );
   const { data: dealNotesData, isLoading: dealNotesLoading } = useGetList(
     "dealNotes",
@@ -29,7 +28,7 @@ export const LatestNotes = () => {
       sort: { field: "date", order: "DESC" },
       filter: { sales_id: identity?.id },
     },
-    { enabled: Number.isInteger(identity?.id) },
+    { enabled: Number.isInteger(identity?.id) }
   );
   if (contactNotesLoading || dealNotesLoading) {
     return null;
@@ -45,7 +44,7 @@ export const LatestNotes = () => {
         ...note,
         type: "contactNote",
       })),
-      dealNotesData.map((note) => ({ ...note, type: "dealNote" })),
+      dealNotesData.map((note) => ({ ...note, type: "dealNote" }))
     )
     .sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
     .slice(0, 5);
@@ -124,9 +123,9 @@ const Contact = ({ note }: any) => (
       reference="contacts"
       link="show"
     >
-      <FunctionField<ContactType>
+      <FunctionField<any>
         variant="body2"
-        render={(contact?: ContactType) =>
+        render={(contact?: Contacts) =>
           contact ? `${contact.first_name} ${contact.last_name}` : ""
         }
       />

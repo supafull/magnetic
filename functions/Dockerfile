@@ -1,3 +1,3 @@
-FROM supabase/edge-runtime:v1.46.0
+FROM supabase/edge-runtime:v1.53.4
 
 COPY ./src /functions

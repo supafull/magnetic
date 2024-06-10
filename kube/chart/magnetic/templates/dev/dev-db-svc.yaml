@@ -1,4 +1,4 @@
-{{- if and .Values.project.local.enabled .Values.project.local.enableDbNodePorts -}}
+{{- if and .Values.project.local.enabled .Values.project.local.enableNodePorts -}}
 apiVersion: v1
 kind: Service
 metadata:

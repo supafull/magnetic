@@ -16,7 +16,7 @@ project:
   name: "{{ .Release.Name }}"
   local:
     enabled: false
-    enableDbNodePorts: false
+    enableNodePorts: false
 
 frontend:
   enabled: true
@@ -106,9 +106,11 @@ frontend:
     servicePort: 80
     type: ClusterIP
 
+  # FIXME: this is a hack to get the frontend to work with the current setup
+  # it MUST be 80 here, or it won't work. This was originally not meant to be used with nginx!
   application:
     listenAddress: 0.0.0.0
-    listenPort: 8000
+    listenPort: 80
   ## Additional transcrobes container arguments
   ##
   extraArgs: {}
@@ -119,11 +121,11 @@ electric:
   pgProxySecretName: electric-pg-proxy
   auth:
     jwtAlg: "HS256"  # make sure your key is long enough for the algorithm!
-    secretName: ""  # if not specified, will use template "supaplus.jwt.secretName"
-    secretKey: ""  # if not specified, will use template "supaplus.jwt.secretKey"
+    secretName: ""  # if not specified, will use template "supabase.jwt.secretName"
+    secretKey: ""  # if not specified, will use template "supabase.jwt.secretKey"
   image:
     repository: electricsql/electric
-    tag: 0.11.0
+    tag: 0.11.1
     pullPolicy: IfNotPresent
   podAnnotations: {}
   replicaCount: 1

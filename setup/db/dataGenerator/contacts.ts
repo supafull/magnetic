@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker/locale/en_US";
 import { v4 as uuidv4 } from "uuid";
 
-import { Contact } from "../../frontend/src/types";
+import { Contact } from "../../../frontend/src/types";
 import { Db } from "./types";
 import { randomDate, weightedBoolean } from "./utils";
 
@@ -41,9 +41,13 @@ export function generateContacts(
       lastName: last_name,
     });
     const avatar = has_avatar
-      ? "https://marmelab.com/posters/avatar-" +
-        (223 - numberOfContacts) +
-        ".jpeg"
+      ? {
+          src:
+            "https://marmelab.com/posters/avatar-" +
+            (223 - numberOfContacts) +
+            ".jpeg",
+          title: `${first_name} ${last_name}`,
+        }
       : undefined;
     const title = fakerCompany.buzzAdjective();
 

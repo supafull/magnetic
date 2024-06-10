@@ -32,7 +32,9 @@ for project in ${PROJECTS}; do
 done
 
 helm upgrade --install ${APPNAME} \
+  --wait \
+  --timeout 30m00s \
   ${SCRIPT_DIR}/kube/chart/${APPNAME}/ --namespace ${NAMESPACE} \
   --set frontend.image.tag="${GIT_VERSION}" \
-  --set supaplus.functions.image.tag="${GIT_VERSION}" \
+  --set supabase.functions.image.tag="${GIT_VERSION}" \
   -f ${SCRIPT_DIR}/kube/k3d-deploy/overrides-dev.yaml

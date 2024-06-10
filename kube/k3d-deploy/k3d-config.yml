@@ -8,7 +8,7 @@ kubeAPI:
   host: "localhost"
   hostIP: "127.0.0.1"
   hostPort: "6446"
-image: rancher/k3s:v1.29.4-k3s1
+image: rancher/k3s:v1.30.0-k3s1
 
 registries: # define how registries should be created or used
   use:
@@ -21,11 +21,15 @@ ports:
   - port: 443:443
     nodeFilters:
       - loadbalancer
+  # supabase realtime
+  - port: 30400:30400
+    nodeFilters:
+      - loadbalancer
   # supabase postgresql
   - port: 30432:30432
     nodeFilters:
       - loadbalancer
-  # analyticsdb postgresql
+  # supabase analyticsdb postgresql
   - port: 30433:30433
     nodeFilters:
       - loadbalancer

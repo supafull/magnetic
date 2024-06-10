@@ -12,11 +12,11 @@ import {
   useRecordContext,
 } from "react-admin";
 import { TagsListEdit } from "./TagsListEdit";
-
-import { Contact, Sale } from "../types";
+import { Contacts, Sales } from "../generated/client";
 
 export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
-  const record = useRecordContext<Contact>();
+  const record = useRecordContext<Contacts>();
+
   return (
     <Box ml={4} width={250} minWidth={250}>
       <Box textAlign="center" mb={2}>
@@ -70,7 +70,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
           Followed by
         </Typography>{" "}
         <ReferenceField source="sales_id" reference="sales">
-          <FunctionField<Sale>
+          <FunctionField<Sales>
             source="last_name"
             render={(record) =>
               record ? `${record.first_name} ${record.last_name}` : ""

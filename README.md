@@ -6,7 +6,7 @@ This project contains code and configuration examples for setting up the backend
 
 It includes an adaptation of the React Admin [`ra-supabase`](https://github.com/marmelab/ra-supabase) demo code (which is itself an adaptation of the React Admin demo CRM) to be used with [`electric-sql`](https://electric-sql.com). The code was originally compatible with `electric` `0.10.1` and `react-admin` but may be updated for later versions.
 
-The kubernetes chart uses [`supaplus` `helm` chart](https://github.com/supafull/helm-charts/) for `supabase` support, which in turn uses the `bitnami` [`supabase`](https://github.com/bitnami/charts/tree/main/bitnami/supabase) (4+) chart as a base, adding the missing features as at April 2024 (so `analytics/vector+logflare`, `imgproxy` and `functions`). Hopefully either the `bitnami` chart will eventually include the missing features (don't hold your breath!) or the [`supabase-community`](https://github.com/supabase-community/supabase-kubernetes/) chart will eventually evolve to support multi-node deployments.
+The kubernetes chart uses the [`supabase` `helm` chart](https://github.com/supafull/helm-charts/) for `supabase` support, which started life as the `bitnami` [`supabase`](https://github.com/bitnami/charts/tree/main/bitnami/supabase) (4+) chart, adding the missing features as at June 2024 (so `analytics/vector+logflare`, `imgproxy` and `functions`, and making broken features like `realtime` actually work).
 
 This project exists AS AN EXAMPLE usage of the technologies, and has no tests. This is, of course, bad. It has bugs but many such example projects do. If you find any and care, please submit fixes!
 
@@ -61,11 +61,8 @@ Once you have confirmed that all the kubernetes services have started correctly 
 You can then:
 
 ```bash
-cd ~/dev/magnetic/
-cp .env.example .env
-pnpm install
-pnpm db:migrate  # this will create the tables and electrify them
-pnpm db:seed  # this will create the CRM data values and supabase users
+cd ~/dev/magnetic/setup
+bash load-data.sh
 ```
 
 These commands should finish with no visible errors, and you should now see some tables and data in `supabase-studio.localhost`.
@@ -74,7 +71,7 @@ You can then start the frontend:
 
 ```bash
 cd ~/dev/magnetic/frontend
-bash refresh-client.sh
+ELECTRIC_SERVICE_URL=http://localhost:31133 ELECTRIC_PG_PROXY_URL=postgresql://postgres:proxy_password@localhost:31432/postgres bash refresh-client.sh
 pnpm dev
 ```
 
@@ -85,6 +82,6 @@ As of 2024-05-08 `electric-sql` has preliminary support for `pglite` as the clie
 
 ## Bugs and missing features
 
-The `supaplus` chart that installs `supabase` is very new and hasn't been fully tested or battle-hardened, so expect many rough edges.
+The `supabase` chart is very new and hasn't been fully tested or battle-hardened, so expect many rough edges.
 
 The original `ra-supabase` has lots of areas that appear to be bugs (because it was a copy/paste of the non-`supabase` version?) but only those that directly required fixing for basic `electric` support were fixed.

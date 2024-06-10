@@ -1,7 +1,7 @@
 import { Box, Card, CardContent } from "@mui/material";
 import { EditBase, Form, Toolbar, useEditContext } from "react-admin";
 
-import { Contact } from "../types";
+import { Contacts } from "../generated/client";
 import { Avatar } from "./Avatar";
 import { ContactAside } from "./ContactAside";
 import { ContactInputs } from "./ContactInputs";
@@ -13,7 +13,7 @@ export const ContactEdit = () => (
 );
 
 const ContactEditContent = () => {
-  const { isLoading, record } = useEditContext<Contact>();
+  const { isLoading, record } = useEditContext<Contacts>();
   if (isLoading || !record) return null;
   return (
     <Box mt={2} display="flex">

@@ -1,11 +1,11 @@
-import { ReferenceField, useRedirect } from "react-admin";
-import { Box, Card, Typography } from "@mui/material";
 import { Draggable } from "@hello-pangea/dnd";
+import { Box, Card, Typography } from "@mui/material";
+import { ReferenceField, useRedirect } from "react-admin";
 
 import { LogoField } from "../companies/LogoField";
-import { Deal } from "../types";
+import { Deals } from "../generated/client";
 
-export const DealCard = ({ deal, index }: { deal: Deal; index: number }) => {
+export const DealCard = ({ deal, index }: { deal: Deals; index: number }) => {
   const redirect = useRedirect();
   if (!deal) return null;
 

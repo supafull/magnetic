@@ -1,0 +1,24 @@
+{{- if and .Values.supabase.realtime.enabled .Values.project.local.enabled .Values.project.local.enableNodePorts -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: realtime
+    app.kubernetes.io/name: supabase
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+  name: realtime-nodeport
+spec:
+  ports:
+  - name: nodeport-30400
+    nodePort: 30400
+    port: {{ .Values.supabase.realtime.service.ports.http }}
+    protocol: TCP
+    targetPort: {{ .Values.supabase.realtime.containerPorts.http }}
+  selector:
+    app.kubernetes.io/component: realtime
+    app.kubernetes.io/name: supabase
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+  type: NodePort
+{{- end -}}

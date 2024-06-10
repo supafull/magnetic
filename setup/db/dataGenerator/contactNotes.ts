@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker/locale/en_US";
 import { v4 as uuidv4 } from "uuid";
 
-import { ContactNote } from "../../frontend/src/types";
+import { ContactNote } from "../../../frontend/src/types";
 import { Db } from "./types";
 import { randomDate } from "./utils";
 

@@ -22,34 +22,36 @@ import {
   useUpdate,
 } from "react-admin";
 
+import { Contacts, Tags } from "../generated/client";
 import { colors } from "../tags/colors";
-import { Contact, Tag } from "../types";
 
 export const TagsListEdit = () => {
-  const record = useRecordContext<Contact>();
+  const record = useRecordContext<Contacts>();
   const [open, setOpen] = useState(false);
   const [newTagName, setNewTagName] = useState("");
   const [newTagColor, setNewTagColor] = useState(colors[0]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [disabled, setDisabled] = useState(false);
-
-  const { data: allTags, isLoading: isLoadingAllTags } = useGetList<Tag>(
+  const recordTags = record?.tags as Array<string>;
+  const { data: allTags, isLoading: isLoadingAllTags } = useGetList<Tags>(
     "tags",
     {
       pagination: { page: 1, perPage: 10 },
       sort: { field: "name", order: "ASC" },
     }
   );
-  const { data: tags, isLoading: isLoadingRecordTags } = useGetMany<Tag>(
+  const { data: tags, isLoading: isLoadingRecordTags } = useGetMany<Tags>(
     "tags",
-    { ids: record.tags },
-    { enabled: record && record.tags && record.tags.length > 0 }
+    { ids: recordTags },
+    {
+      enabled: !!recordTags && recordTags.length > 0,
+    }
   );
-  const [update] = useUpdate<Contact>();
-  const [create] = useCreate<Tag>();
+  const [update] = useUpdate<Contacts>();
+  const [create] = useCreate<Tags>();
 
   const unselectedTags =
-    allTags && allTags.filter((tag) => !record.tags.includes(tag.id));
+    allTags && allTags.filter((tag) => !recordTags.includes(tag.id));
 
   const handleOpen = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -60,7 +62,7 @@ export const TagsListEdit = () => {
   };
 
   const handleDeleteTag = (id: Identifier) => {
-    const tags: Identifier[] = record.tags.filter(
+    const tags: Identifier[] = recordTags.filter(
       (tagId: Identifier) => tagId !== id
     );
     update("contacts", {
@@ -71,7 +73,7 @@ export const TagsListEdit = () => {
   };
 
   const handleAddTag = (id: Identifier) => {
-    const tags: Identifier[] = [...record.tags, id];
+    const tags: Identifier[] = [...recordTags, id];
     update("contacts", {
       id: record.id,
       data: { tags },
@@ -104,7 +106,7 @@ export const TagsListEdit = () => {
             "contacts",
             {
               id: record.id,
-              data: { tags: [...record.tags, tag.id] },
+              data: { tags: [...recordTags, tag.id] },
               previousData: record,
             },
             {

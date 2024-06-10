@@ -16,7 +16,7 @@ ALTER TABLE tags ENABLE ELECTRIC;
 CREATE TABLE IF NOT EXISTS companies (
     id UUID PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
-    logo TEXT NOT NULL,
+    logo JSONB NULL,
     sector TEXT NOT NULL,
     size SMALLINT NOT NULL,
     linked_in TEXT NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     phone_number2 TEXT,
     background TEXT,
     acquisition TEXT,
-    avatar TEXT NULL,
+    avatar JSONB NULL,
     first_seen TIMESTAMP NOT NULL,
     last_seen TIMESTAMP NOT NULL,
     has_newsletter BOOLEAN,
@@ -100,3 +100,19 @@ CREATE TABLE IF NOT EXISTS deal_notes (
     text TEXT NOT NULL
 );
 ALTER TABLE deal_notes ENABLE ELECTRIC;
+
+ALTER PUBLICATION supabase_realtime ADD TABLE tasks, deals;
+
+CREATE POLICY allow_authenticated_uploads
+ON storage.objects
+FOR ALL
+TO AUTHENTICATED
+USING (bucket_id = 'uploads')
+WITH CHECK (bucket_id = 'uploads');
+
+CREATE POLICY allow_logo_uploads
+ON storage.objects
+FOR ALL
+TO AUTHENTICATED
+USING (bucket_id = 'logos')
+WITH CHECK (bucket_id = 'logos');

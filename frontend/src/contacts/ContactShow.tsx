@@ -8,8 +8,8 @@ import {
 } from "react-admin";
 
 import { LogoField } from "../companies/LogoField";
+import { Contacts } from "../generated/client";
 import { NotesIterator } from "../notes";
-import { Contact } from "../types";
 import { Avatar } from "./Avatar";
 import { ContactAside } from "./ContactAside";
 
@@ -20,7 +20,7 @@ export const ContactShow = () => (
 );
 
 const ContactShowContent = () => {
-  const { record, isLoading } = useShowContext<Contact>();
+  const { record, isLoading } = useShowContext<Contacts>();
   if (isLoading || !record) return null;
   return (
     <Box mt={2} display="flex">

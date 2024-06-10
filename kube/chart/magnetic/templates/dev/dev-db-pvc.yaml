@@ -1,4 +1,4 @@
-{{- if and .Values.supaplus.supabase.postgresql.primary.persistence.enabled .Values.project.local.enabled -}}
+{{- if and .Values.supabase.postgresql.primary.persistence.enabled .Values.project.local.enabled -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -14,6 +14,6 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.supaplus.supabase.postgresql.primary.persistence.size }}
+      storage: {{ .Values.supabase.postgresql.primary.persistence.size }}
 status: {}
 {{- end }}

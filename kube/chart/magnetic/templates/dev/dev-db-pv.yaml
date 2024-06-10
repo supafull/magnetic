@@ -1,4 +1,4 @@
-{{- if and .Values.supaplus.supabase.postgresql.primary.persistence.enabled .Values.project.local.enabled -}}
+{{- if and .Values.supabase.postgresql.primary.persistence.enabled .Values.project.local.enabled -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -11,7 +11,7 @@ metadata:
 spec:
   storageClassName: manual-db
   capacity:
-    storage: {{ .Values.supaplus.supabase.postgresql.primary.persistence.size }}
+    storage: {{ .Values.supabase.postgresql.primary.persistence.size }}
   accessModes:
     - ReadWriteOnce
   hostPath:

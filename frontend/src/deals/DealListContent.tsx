@@ -4,13 +4,13 @@ import { isEqual } from "lodash-es";
 import { useContext, useEffect, useState } from "react";
 import { DataProviderContext, Identifier, useListContext } from "react-admin";
 
-import { Deal } from "../types";
+import { Deals } from "../generated/client";
 import { DealColumn } from "./DealColumn";
 import { stages } from "./stages";
 
 export interface RecordMap {
-  [id: number]: Deal;
-  [id: string]: Deal;
+  [id: number]: Deals;
+  [id: string]: Deals;
 }
 
 interface DealsByColumn {
@@ -22,11 +22,10 @@ const initialDeals: DealsByColumn = stages.reduce(
   {}
 );
 
-const getDealsByColumn = (data: Deal[]): DealsByColumn => {
+const getDealsByColumn = (data: Deals[]): DealsByColumn => {
   // group deals by column
   const columns = data.reduce(
     (acc, record) => {
-      // console.log("wwwdf", acc, record);
       acc[record.stage].push(record);
       return acc;
     },
@@ -35,17 +34,19 @@ const getDealsByColumn = (data: Deal[]): DealsByColumn => {
   // order each column by index
   stages.forEach((stage) => {
     columns[stage] = columns[stage]
-      .sort((recordA: Deal, recordB: Deal) => recordA.anindex - recordB.anindex)
-      .map((deal: Deal) => deal.id);
+      .sort(
+        (recordA: Deals, recordB: Deals) => recordA.anindex - recordB.anindex
+      )
+      .map((deal: Deals) => deal.id);
   });
   return columns;
 };
 
-const indexById = (data: Deal[]): RecordMap =>
+const indexById = (data: Deals[]): RecordMap =>
   data.reduce((obj, record) => ({ ...obj, [record.id]: record }), {});
 
 export const DealListContent = () => {
-  const { data: unorderedDeals, isLoading, refetch } = useListContext<Deal>();
+  const { data: unorderedDeals, isLoading, refetch } = useListContext<Deals>();
 
   const [data, setData] = useState<RecordMap>(
     isLoading ? {} : indexById(unorderedDeals)

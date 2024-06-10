@@ -4,11 +4,12 @@ ingressnginx:
 project:
   local:
     enabled: true
-    enableDbNodePorts: true
+    enableNodePorts: true
 
 electric:
   image:
-    tag: 0.11.0
+    tag: 0.12.0
+    # tag: 0.11.1
     # pullPolicy: Always
 
 frontend:
@@ -17,7 +18,7 @@ frontend:
     enabled: true
     # srcFrom: /backend
     ## a port to use for the dev-local frontend for serving the frontend code.
-    ## If not set, the frontend will be served from the container
+    ## If not set (along with `enabled` above), the frontend will be served from the container
     frontendPort: 5000
 
   persistence:
@@ -55,7 +56,12 @@ frontend:
   perDomain:
     - ".well-known"
 
-supaplus:
+supabase:
+  global:
+    jwt:
+      existingSecret: jwt-secret
+
+  publicURL: "https://supabase.localhost"
   analytics:
     resourcesPreset: "none"
     logLevel: debug
@@ -78,6 +84,13 @@ supaplus:
     auth:
       existingSecret: externaldb-analyticsdb
 
+  auth:
+    resourcesPreset: "none"
+    extraEnvVars:
+      # GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      # GOTRUE_MAILER_AUTOCONFIRM: "true"
+      - name: API_EXTERNAL_URL
+        value: "https://supabase.localhost"
   functions:
     userFunctionsPath: /functions
     # command:
@@ -131,8 +144,59 @@ supaplus:
       repository: magnetic/magnetic-functions
 
   imgproxy:
-    resourcesPreset: "none"
+    image:
+      tag: v3.24.1
 
+    resourcesPreset: "none"
+    # extraEnvVars:
+    #   # - name: IMGPROXY_KEY
+    #   #   value: "736f6d656b6579"  # somekey
+    #   # - name: IMGPROXY_SALT
+    #   #   value: "736f6d6573616c74"  # somesalt
+
+    #   # - name: IMGPROXY_LOCAL_FILESYSTEM_ROOT
+    #   #   value: /opt # you can link to minio volume to imgproxy and use as a local filesystem.
+
+    #   # - name: IMGPROXY_LOCAL_FILESYSTEM_ROOT
+    #   #   value: /
+
+    #   # - name: IMGPROXY_USE_S3
+    #   #   value: 'true'
+    #   # - name: IMGPROXY_S3_ENDPOINT
+    #   #   value: "http://magnetic-minio:9000"
+    #   # - name: AWS_ACCESS_KEY_ID
+    #   #   valueFrom:
+    #   #     secretKeyRef:
+    #   #       name: minio-secret
+    #   #       key: root-user
+    #   # - name: AWS_SECRET_ACCESS_KEY
+    #   #   valueFrom:
+    #   #     secretKeyRef:
+    #   #       name: minio-secret
+    #   #       key: root-password
+    #   # - name: AWS_REGION
+    #   #   value: us-east-1
+
+  kong:
+    image:
+      debug: true
+    replicaCount: 1
+    kong:
+      resourcesPreset: "none"
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
+      hostname: supabase.localhost
+      ingressClassName: nginx
+      tls: true
+      extraTls:
+        - hosts:
+            - supabase.localhost
+          secretName: "magnetic-supabase-cert"
+    extraEnvVars:
+      - name: KONG_LOG_LEVEL
+        value: debug
   minio:
     resourcesPreset: "none"
     enabled: true
@@ -146,101 +210,90 @@ supaplus:
       ingressClassName: nginx
       hostname: minio.localhost
 
-  supabase:
-    publicURL: "https://supabase.localhost"
-    global:
-      jwt:
-        existingSecret: jwt-secret
+  meta:
+    resourcesPreset: "none"
+  postgresql:
+    image:
+      debug: true
+    primary:
+      resourcesPreset: "none"
+      persistence:
+        existingClaim: "magnetic-db"
+      extendedConfiguration: |-
+        wal_level = logical
+        huge_pages = off
+        max_stack_depth = 6MB
+
+    # Needed because of a bug when specifying extendedConf
+    volumePermissions:
+      enabled: true
     auth:
-      resourcesPreset: "none"
-      extraEnvVars:
-        # GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
-        # GOTRUE_MAILER_AUTOCONFIRM: "true"
-        - name: API_EXTERNAL_URL
-          value: "https://supabase.localhost"
-    kong:
-      kong:
-        resourcesPreset: "none"
-      ingress:
-        enabled: true
-        hostname: supabase.localhost
-        ingressClassName: nginx
-        tls: true
-        extraTls:
-          - hosts:
-              - supabase.localhost
-            secretName: "magnetic-supabase-cert"
+      existingSecret: db-password
+  realtime:
+    resourcesPreset: "none"
+  rest:
+    resourcesPreset: "none"
+  storage:
+    resourcesPreset: "none"
+    image:
+      debug: true
 
-    meta:
-      resourcesPreset: "none"
-    postgresql:
-      image:
-        debug: true
-      primary:
-        resourcesPreset: "none"
-        persistence:
-          existingClaim: "magnetic-db"
-        extendedConfiguration: |-
-          wal_level = logical
-          huge_pages = off
-          max_stack_depth = 6MB
+    extraEnvVars:
+      - name: NODE_ENV
+        value: "production"
 
-      # Needed because of a bug when specifying extendedConf
-      volumePermissions:
-        enabled: true
-      auth:
-        existingSecret: db-password
-    realtime:
-      resourcesPreset: "none"
-    rest:
-      resourcesPreset: "none"
-    storage:
-      resourcesPreset: "none"
-      extraEnvVars:
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: minio-secret
-              key: root-user
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: minio-secret
-              key: root-password
+      - name: ENABLE_IMAGE_TRANSFORMATION
+        value: "true"
+      - name: IMGPROXY_URL
+        value: "http://magnetic-supabase-imgproxy:5001"
 
-    studio:
-      resourcesPreset: "none"
-      publicURL: "https://supabase-studio.localhost"
-      ingress:
-        hostname: supabase-studio.localhost
-        enabled: true
-        ingressClassName: nginx
-        tls: true
-        extraTls:
-        - hosts:
-            - supabase-studio.localhost
-          secretName: "magnetic-supabase-studio-cert"
+      - name: TUS_URL_PATH
+        value: "/storage/v1/upload/resumable"
 
-      extraEnvVars:
-        - name: NEXT_PUBLIC_ENABLE_LOGS
-          value: "true"
-        - name: NEXT_ANALYTICS_BACKEND_PROVIDER
-          value: postgres  # postgres, bigquery
-        - name: LOGFLARE_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: supaplus-logflare
-              key: api-key
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: minio-secret
-              key: root-user
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: minio-secret
-              key: root-password
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: root-user
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: root-password
+
+  studio:
+    resourcesPreset: "none"
+    publicURL: "https://supabase-studio.localhost"
+    ingress:
+      hostname: supabase-studio.localhost
+      enabled: true
+      ingressClassName: nginx
+      tls: true
+      extraTls:
+      - hosts:
+          - supabase-studio.localhost
+        secretName: "magnetic-supabase-studio-cert"
+
+    extraEnvVars:
+      - name: NEXT_PUBLIC_ENABLE_LOGS
+        value: "true"
+      - name: NEXT_ANALYTICS_BACKEND_PROVIDER
+        value: postgres  # postgres, bigquery
+      - name: LOGFLARE_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: supabase-logflare
+            key: api-key
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: root-user
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: root-password
 
   externalDatabaseAnalyticsdb:
     host: "some-postgresql"

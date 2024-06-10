@@ -9,8 +9,8 @@ import { generateDeals } from "./db/dataGenerator/deals";
 import { generateSales } from "./db/dataGenerator/sales";
 import { generateTags } from "./db/dataGenerator/tags";
 import { generateTasks } from "./db/dataGenerator/tasks";
-import { ContactNote } from "./frontend/src/types";
-import { removeDupes } from "./frontend/src/utils";
+import { removeDupes } from "../frontend/src/utils";
+import { Contact_notes } from "../frontend/src/generated/client";
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 dotenv.config();
@@ -22,7 +22,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY as string
 );
 
-export async function seed() {
+async function seed() {
   // reseed data, first delete all data
   const deleteResults = await Promise.all([
     supabase
@@ -143,7 +143,7 @@ export async function seed() {
   }
 
   const updatedContacts = removeDupes(
-    (persistedContactNotes as ContactNote[])
+    (persistedContactNotes as Contact_notes[])
       .sort((a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf())
       .map((note) =>
         persistedContacts.find((contact) => contact.id === note.contact_id)
@@ -221,6 +221,23 @@ export async function seed() {
 
 seed().catch((error) => {
   console.error(error);
+  process.exit(1);
+});
 
+async function setupStorage() {
+  const uploads = await supabase.storage.createBucket("uploads", {
+    public: false,
+    fileSizeLimit: 10 * 1024 * 1024,
+  });
+  console.log("uploads bucket created", uploads.data, uploads.error);
+
+  const logos = await supabase.storage.createBucket("logos", {
+    public: true,
+    fileSizeLimit: 1024 * 1024,
+  });
+  console.log("logos bucket created", logos.data, logos.error);
+}
+setupStorage().catch((error) => {
+  console.error(error);
   process.exit(1);
 });

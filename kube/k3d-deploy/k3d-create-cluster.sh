@@ -27,3 +27,6 @@ k3d cluster create ${APPNAME} --config ${SCRIPT_DIR}/k3d-config.yml \
 mkdir -p ~/.kube
 k3d kubeconfig merge ${APPNAME} --output ${KUBECONFIG}
 kubectl --kubeconfig ${KUBECONFIG} config set-context k3d-${APPNAME} --namespace=${NAMESPACE}
+
+# dockerhub and some other sites can be extremely slow over ipv6 in certain situations
+docker exec -i k3d-${APPNAME}-server-0 sysctl -w net.ipv6.conf.all.disable_ipv6=1

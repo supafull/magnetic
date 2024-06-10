@@ -22,7 +22,7 @@ export type Companies = {
    */
   id: string
   name: string
-  logo: string
+  logo: Prisma.JsonValue | null
   sector: string
   /**
    * @zod.number.int().gte(-32768).lte(32767)
@@ -83,7 +83,7 @@ export type Contacts = {
   phone_number2: string | null
   background: string | null
   acquisition: string | null
-  avatar: string | null
+  avatar: Prisma.JsonValue | null
   first_seen: Date
   last_seen: Date
   has_newsletter: boolean | null
@@ -1276,7 +1276,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesMinAggregateOutputType = {
     id: string | null
     name: string | null
-    logo: string | null
     sector: string | null
     size: number | null
     linked_in: string | null
@@ -1293,7 +1292,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    logo: string | null
     sector: string | null
     size: number | null
     linked_in: string | null
@@ -1337,7 +1335,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesMinAggregateInputType = {
     id?: true
     name?: true
-    logo?: true
     sector?: true
     size?: true
     linked_in?: true
@@ -1354,7 +1351,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesMaxAggregateInputType = {
     id?: true
     name?: true
-    logo?: true
     sector?: true
     size?: true
     linked_in?: true
@@ -1481,7 +1477,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesGroupByOutputType = {
     id: string
     name: string
-    logo: string
+    logo: JsonValue | null
     sector: string
     size: number
     linked_in: string
@@ -3440,7 +3436,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2: string | null
     background: string | null
     acquisition: string | null
-    avatar: string | null
     first_seen: Date | null
     last_seen: Date | null
     has_newsletter: boolean | null
@@ -3460,7 +3455,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2: string | null
     background: string | null
     acquisition: string | null
-    avatar: string | null
     first_seen: Date | null
     last_seen: Date | null
     has_newsletter: boolean | null
@@ -3503,7 +3497,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: true
     background?: true
     acquisition?: true
-    avatar?: true
     first_seen?: true
     last_seen?: true
     has_newsletter?: true
@@ -3523,7 +3516,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: true
     background?: true
     acquisition?: true
-    avatar?: true
     first_seen?: true
     last_seen?: true
     has_newsletter?: true
@@ -3643,7 +3635,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2: string | null
     background: string | null
     acquisition: string | null
-    avatar: string | null
+    avatar: JsonValue | null
     first_seen: Date
     last_seen: Date
     has_newsletter: boolean | null
@@ -9948,7 +9940,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<CompaniesWhereInput>
     id?: UuidFilter | string
     name?: StringFilter | string
-    logo?: StringFilter | string
+    logo?: JsonNullableFilter
     sector?: StringFilter | string
     size?: IntFilter | number
     linked_in?: StringFilter | string
@@ -10017,7 +10009,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<CompaniesScalarWhereWithAggregatesInput>
     id?: UuidWithAggregatesFilter | string
     name?: StringWithAggregatesFilter | string
-    logo?: StringWithAggregatesFilter | string
+    logo?: JsonNullableWithAggregatesFilter
     sector?: StringWithAggregatesFilter | string
     size?: IntWithAggregatesFilter | number
     linked_in?: StringWithAggregatesFilter | string
@@ -10102,7 +10094,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: StringNullableFilter | string | null
     background?: StringNullableFilter | string | null
     acquisition?: StringNullableFilter | string | null
-    avatar?: StringNullableFilter | string | null
+    avatar?: JsonNullableFilter
     first_seen?: DateTimeFilter | Date | string
     last_seen?: DateTimeFilter | Date | string
     has_newsletter?: BoolNullableFilter | boolean | null
@@ -10183,7 +10175,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: StringNullableWithAggregatesFilter | string | null
     background?: StringNullableWithAggregatesFilter | string | null
     acquisition?: StringNullableWithAggregatesFilter | string | null
-    avatar?: StringNullableWithAggregatesFilter | string | null
+    avatar?: JsonNullableWithAggregatesFilter
     first_seen?: DateTimeWithAggregatesFilter | Date | string
     last_seen?: DateTimeWithAggregatesFilter | Date | string
     has_newsletter?: BoolNullableWithAggregatesFilter | boolean | null
@@ -10477,7 +10469,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesCreateInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -10496,7 +10488,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedCreateInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -10515,7 +10507,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -10534,7 +10526,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -10553,7 +10545,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesCreateManyInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -10570,7 +10562,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -10586,7 +10578,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -10679,7 +10671,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -10702,7 +10694,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -10725,7 +10717,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -10748,7 +10740,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -10771,7 +10763,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -10792,7 +10784,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -10811,7 +10803,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -11198,6 +11190,28 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     mode?: QueryMode
     not?: NestedStringFilter | string
   }
+  export type JsonNullableFilter = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase>, Exclude<keyof Required<JsonNullableFilterBase>, 'path'>>,
+        Required<JsonNullableFilterBase>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase>, 'path'>>
+
+  export type JsonNullableFilterBase = {
+    equals?: InputJsonValue | JsonNullValueFilter
+    path?: Array<string>
+    string_contains?: string
+    string_starts_with?: string
+    string_ends_with?: string
+    array_contains?: InputJsonValue | null
+    array_starts_with?: InputJsonValue | null
+    array_ends_with?: InputJsonValue | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonNullValueFilter
+  }
 
   export type IntFilter = {
     equals?: number
@@ -11270,7 +11284,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    logo?: SortOrder
     sector?: SortOrder
     size?: SortOrder
     linked_in?: SortOrder
@@ -11287,7 +11300,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    logo?: SortOrder
     sector?: SortOrder
     size?: SortOrder
     linked_in?: SortOrder
@@ -11336,6 +11348,31 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _count?: NestedIntFilter
     _min?: NestedStringFilter
     _max?: NestedStringFilter
+  }
+  export type JsonNullableWithAggregatesFilter = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase = {
+    equals?: InputJsonValue | JsonNullValueFilter
+    path?: Array<string>
+    string_contains?: string
+    string_starts_with?: string
+    string_ends_with?: string
+    array_contains?: InputJsonValue | null
+    array_starts_with?: InputJsonValue | null
+    array_ends_with?: InputJsonValue | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonNullValueFilter
+    _count?: NestedIntNullableFilter
+    _min?: NestedJsonNullableFilter
+    _max?: NestedJsonNullableFilter
   }
 
   export type IntWithAggregatesFilter = {
@@ -11449,28 +11486,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     equals?: boolean | null
     not?: NestedBoolNullableFilter | boolean | null
   }
-  export type JsonNullableFilter = 
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase>, Exclude<keyof Required<JsonNullableFilterBase>, 'path'>>,
-        Required<JsonNullableFilterBase>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase>, 'path'>>
-
-  export type JsonNullableFilterBase = {
-    equals?: InputJsonValue | JsonNullValueFilter
-    path?: Array<string>
-    string_contains?: string
-    string_starts_with?: string
-    string_ends_with?: string
-    array_contains?: InputJsonValue | null
-    array_starts_with?: InputJsonValue | null
-    array_ends_with?: InputJsonValue | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonNullValueFilter
-  }
 
   export type Contact_notesListRelationFilter = {
     every?: Contact_notesWhereInput
@@ -11529,7 +11544,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: SortOrder
     background?: SortOrder
     acquisition?: SortOrder
-    avatar?: SortOrder
     first_seen?: SortOrder
     last_seen?: SortOrder
     has_newsletter?: SortOrder
@@ -11549,7 +11563,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: SortOrder
     background?: SortOrder
     acquisition?: SortOrder
-    avatar?: SortOrder
     first_seen?: SortOrder
     last_seen?: SortOrder
     has_newsletter?: SortOrder
@@ -11582,31 +11595,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _count?: NestedIntNullableFilter
     _min?: NestedBoolNullableFilter
     _max?: NestedBoolNullableFilter
-  }
-  export type JsonNullableWithAggregatesFilter = 
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase = {
-    equals?: InputJsonValue | JsonNullValueFilter
-    path?: Array<string>
-    string_contains?: string
-    string_starts_with?: string
-    string_ends_with?: string
-    array_contains?: InputJsonValue | null
-    array_starts_with?: InputJsonValue | null
-    array_ends_with?: InputJsonValue | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonNullValueFilter
-    _count?: NestedIntNullableFilter
-    _min?: NestedJsonNullableFilter
-    _max?: NestedJsonNullableFilter
   }
 
   export type DealsRelationFilter = {
@@ -12536,6 +12524,39 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _max?: NestedStringFilter
   }
 
+  export type NestedIntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
+  }
+  export type NestedJsonNullableFilter = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase>, Exclude<keyof Required<NestedJsonNullableFilterBase>, 'path'>>,
+        Required<NestedJsonNullableFilterBase>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase>, 'path'>>
+
+  export type NestedJsonNullableFilterBase = {
+    equals?: InputJsonValue | JsonNullValueFilter
+    path?: Array<string>
+    string_contains?: string
+    string_starts_with?: string
+    string_ends_with?: string
+    array_contains?: InputJsonValue | null
+    array_starts_with?: InputJsonValue | null
+    array_ends_with?: InputJsonValue | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonNullValueFilter
+  }
+
   export type NestedIntWithAggregatesFilter = {
     equals?: number
     in?: Enumerable<number>
@@ -12602,17 +12623,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _max?: NestedStringNullableFilter
   }
 
-  export type NestedIntNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableFilter | number | null
-  }
-
   export type NestedStringNullableFilter = {
     equals?: string | null
     in?: Enumerable<string> | null
@@ -12655,28 +12665,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _count?: NestedIntNullableFilter
     _min?: NestedBoolNullableFilter
     _max?: NestedBoolNullableFilter
-  }
-  export type NestedJsonNullableFilter = 
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase>, Exclude<keyof Required<NestedJsonNullableFilterBase>, 'path'>>,
-        Required<NestedJsonNullableFilterBase>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase>, 'path'>>
-
-  export type NestedJsonNullableFilterBase = {
-    equals?: InputJsonValue | JsonNullValueFilter
-    path?: Array<string>
-    string_contains?: string
-    string_starts_with?: string
-    string_ends_with?: string
-    array_contains?: InputJsonValue | null
-    array_starts_with?: InputJsonValue | null
-    array_ends_with?: InputJsonValue | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonNullValueFilter
   }
 
   export type NestedDateTimeNullableFilter = {
@@ -12744,7 +12732,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -12766,7 +12754,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -12888,7 +12876,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: StringNullableFilter | string | null
     background?: StringNullableFilter | string | null
     acquisition?: StringNullableFilter | string | null
-    avatar?: StringNullableFilter | string | null
+    avatar?: JsonNullableFilter
     first_seen?: DateTimeFilter | Date | string
     last_seen?: DateTimeFilter | Date | string
     has_newsletter?: BoolNullableFilter | boolean | null
@@ -12944,7 +12932,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -12966,7 +12954,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -13027,7 +13015,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -13049,7 +13037,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -13120,7 +13108,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesCreateWithoutContactsInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -13138,7 +13126,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedCreateWithoutContactsInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -13250,7 +13238,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUpdateWithoutContactsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -13268,7 +13256,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedUpdateWithoutContactsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -13501,7 +13489,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesCreateWithoutDealsInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -13519,7 +13507,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedCreateWithoutDealsInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -13604,7 +13592,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUpdateWithoutDealsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -13622,7 +13610,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedUpdateWithoutDealsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -13669,7 +13657,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesCreateWithoutSalesInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -13687,7 +13675,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedCreateWithoutSalesInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -13751,7 +13739,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -13773,7 +13761,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -13910,7 +13898,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     NOT?: Enumerable<CompaniesScalarWhereInput>
     id?: UuidFilter | string
     name?: StringFilter | string
-    logo?: StringFilter | string
+    logo?: JsonNullableFilter
     sector?: StringFilter | string
     size?: IntFilter | number
     linked_in?: StringFilter | string
@@ -14015,7 +14003,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -14037,7 +14025,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -14098,7 +14086,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -14120,7 +14108,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -14171,7 +14159,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -14206,7 +14194,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -14228,7 +14216,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -14250,7 +14238,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -14409,7 +14397,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesCreateManySalesInput = {
     id: string
     name: string
-    logo: string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector: string
     size: number
     linked_in: string
@@ -14442,7 +14430,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: string | null
     background?: string | null
     acquisition?: string | null
-    avatar?: string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen: Date | string
     last_seen: Date | string
     has_newsletter?: boolean | null
@@ -14485,7 +14473,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUpdateWithoutSalesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -14503,7 +14491,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedUpdateWithoutSalesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -14521,7 +14509,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type CompaniesUncheckedUpdateManyWithoutCompaniesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    logo?: StringFieldUpdateOperationsInput | string
+    logo?: NullableJsonNullValueInput | InputJsonValue
     sector?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     linked_in?: StringFieldUpdateOperationsInput | string
@@ -14563,7 +14551,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -14585,7 +14573,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     phone_number2?: NullableStringFieldUpdateOperationsInput | string | null
     background?: NullableStringFieldUpdateOperationsInput | string | null
     acquisition?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableJsonNullValueInput | InputJsonValue
     first_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     last_seen?: DateTimeFieldUpdateOperationsInput | Date | string
     has_newsletter?: NullableBoolFieldUpdateOperationsInput | boolean | null

@@ -1,8 +1,8 @@
 import { Box, Paper } from "@mui/material";
 import { RecordContextProvider, useListContext } from "react-admin";
 
-import { Company } from "../types";
 import { CompanyCard } from "./CompanyCard";
+import { Companies } from "../generated/client";
 
 const times = (nbChildren: number, fn: (key: number) => any) =>
   Array.from({ length: nbChildren }, (_, key) => fn(key));
@@ -25,7 +25,7 @@ const LoadingGridList = () => (
 );
 
 const LoadedGridList = () => {
-  const { data, isLoading } = useListContext<Company>();
+  const { data, isLoading } = useListContext<Companies>();
 
   if (isLoading) return null;
 

@@ -6,7 +6,7 @@ import {
   ContactNote,
   Deal,
   Tag,
-} from "../../frontend/src/types";
+} from "../../../frontend/src/types";
 
 export interface Db {
   companies: Company[];

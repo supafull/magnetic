@@ -1,15 +1,15 @@
-import { useState, FormEvent, useEffect } from "react";
+import { Box, Button, TextField as TextInput } from "@mui/material";
+import { FormEvent, useState } from "react";
 import {
-  useRecordContext,
-  useListContext,
-  useCreate,
-  useUpdate,
-  useNotify,
-  useGetIdentity,
   Identifier,
+  useCreate,
+  useGetIdentity,
+  useListContext,
+  useNotify,
+  useRecordContext,
   useResourceContext,
+  useUpdate,
 } from "react-admin";
-import { Box, TextField as TextInput, Button } from "@mui/material";
 
 import { StatusSelector } from "./StatusSelector";
 
@@ -30,10 +30,6 @@ export const NewNote = ({
   const [update] = useUpdate();
   const notify = useNotify();
   const { identity } = useGetIdentity();
-
-  useEffect(() => {
-    console.log("reference", reference);
-  }, [reference]);
 
   if (!record || !identity) return null;
 

@@ -1,10 +1,12 @@
 import { AppBar, Box, Tab, Tabs, Toolbar, Typography } from "@mui/material";
 import { LoadingIndicator, Logout, UserMenu } from "react-admin";
 import { Link, matchPath, useLocation } from "react-router-dom";
+import { MessageContext } from "./App";
+import { useContext } from "react";
 
-const Header = () => {
+export default function Header() {
   const location = useLocation();
-
+  const { message } = useContext(MessageContext);
   let currentPath = "/";
   if (matchPath("/contacts/*", location.pathname)) {
     currentPath = "/contacts";
@@ -60,6 +62,15 @@ const Header = () => {
                 />
               </Tabs>
             </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              {message}
+            </Box>
             <Box display="flex">
               <LoadingIndicator
                 sx={{
@@ -77,6 +88,4 @@ const Header = () => {
       </AppBar>
     </Box>
   );
-};
-
-export default Header;
+}

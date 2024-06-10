@@ -1,4 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { DbSchema, ElectricClient } from "electric-sql/client/model";
+import { genUUID } from "electric-sql/util";
 import * as _ from "lodash-es";
 import {
   CreateParams,
@@ -12,11 +14,9 @@ import {
   UpdateManyParams,
   UpdateParams,
 } from "react-admin";
-import { v4 as uuidv4 } from "uuid";
 
 import { schema } from "../generated/client";
-import { getSupabaseJWT } from "../utils";
-import { initElectric } from "./electric";
+import { bootstrapElectric } from "./electric";
 
 type AnyParams =
   | GetListParams
@@ -31,7 +31,7 @@ type AnyParams =
 type ElectricDataProviderParams = {
   supabase: SupabaseClient;
 };
-export let electric: any;
+export let electric: ElectricClient<DbSchema<typeof schema.tables>>;
 
 type TableName = keyof typeof schema.tables;
 
@@ -62,21 +62,10 @@ function raQueryToElectricQuery(params: AnyParams) {
 export default function ElectricDataProvider(
   params: ElectricDataProviderParams
 ): DataProvider {
-  const loaded = (async () => {
-    electric = await initElectric(await getSupabaseJWT(params.supabase));
-    // This is a simplification for now until we have "shapes"
-    const tableSyncs = Object.keys(schema.tables).map((table) => {
-      // @ts-ignore
-      return electric.db[table].sync();
-    });
-    const syncs = await Promise.all(tableSyncs);
-    await Promise.all(
-      syncs.map((sync: { synced: Promise<undefined> }) => sync.synced)
-    );
-  })();
+  const loaded = bootstrapElectric(params.supabase);
 
   async function getData(options: RequestOptions) {
-    await loaded;
+    electric = await loaded;
     const tableName = _.snakeCase(options.collection);
     const { take, skip, where, orderBy } = options.params;
     try {
@@ -100,7 +89,7 @@ export default function ElectricDataProvider(
       }
       throw new Error("No data returned");
     } catch (e) {
-      console.log("error", tableName, options.method, e);
+      console.error("error", tableName, options.method, e);
     }
   }
   return {
@@ -146,7 +135,7 @@ export default function ElectricDataProvider(
     },
     create: async (resource: TableName, params: CreateParams) => {
       const indata = {
-        id: uuidv4(),
+        id: genUUID(),
         ...params.data,
       };
       const data = await getData({

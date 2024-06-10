@@ -2,11 +2,11 @@ dependencies:
 - name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
   version: 4.10.1
-- name: supaplus
+- name: supabase
   repository: https://supafull.github.io/helm-charts
-  version: 0.0.5
+  version: 0.0.6
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.19.2
-digest: sha256:7a385a03c510d88f9e79705902c5661f295ff84dc0c4ce6f2051db2af8b396f7
-generated: "2024-05-09T16:56:42.521318218+08:00"
+  version: 2.20.2
+digest: sha256:d77b2150454748369189615ca7900609c4971def67349e2eb461a23192ec8d7c
+generated: "2024-06-16T12:22:27.074120328+08:00"

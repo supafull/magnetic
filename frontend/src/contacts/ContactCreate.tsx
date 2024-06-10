@@ -1,15 +1,15 @@
 import { Avatar, Box, Card, CardContent } from "@mui/material";
 import { CreateBase, Form, Toolbar, useGetIdentity } from "react-admin";
 
-import { Contact } from "../types";
 import { ContactInputs } from "./ContactInputs";
+import { Contacts } from "../generated/client";
 
 export const ContactCreate = () => {
   const { identity } = useGetIdentity();
   return (
     <CreateBase
       redirect="show"
-      transform={(data: Contact) => ({
+      transform={(data: Contacts) => ({
         ...data,
         last_seen: new Date(),
         first_seen: new Date(),

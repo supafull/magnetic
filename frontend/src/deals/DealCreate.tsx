@@ -13,7 +13,7 @@ import {
   useRedirect,
 } from "react-admin";
 
-import { Deal } from "../types";
+import { Deals } from "../generated/client";
 import { stageChoices } from "./stages";
 import { typeChoices } from "./types";
 
@@ -27,7 +27,7 @@ export const DealCreate = ({ open }: { open: boolean }) => {
     redirect("/deals");
   };
 
-  const onSuccess = (deal: Deal) => {
+  const onSuccess = (deal: Deals) => {
     redirect("/deals");
     // increase the index of all deals in the same stage as the new deal
     dataProvider
@@ -53,9 +53,9 @@ export const DealCreate = ({ open }: { open: boolean }) => {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <Create<Deal>
+      <Create<Deals>
         resource="deals"
-        transform={(data: Deal) => ({
+        transform={(data: Deals) => ({
           ...data,
           start_at: new Date(),
           created_at: new Date(),

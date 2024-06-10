@@ -1,6 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-
-import { Contact } from "./types";
+import { Contacts } from "./generated/client";
 
 export async function getSupabaseJWT(supabase: SupabaseClient) {
   const { data } = await supabase.auth.getSession();
@@ -11,7 +10,10 @@ export async function getSupabaseJWT(supabase: SupabaseClient) {
   return token;
 }
 
-export function removeDupes(arr: Contact[], map = new Map<string, Contact>()) {
-  arr.forEach((o) => map.set(o.id as string, o));
+export function removeDupes(
+  arr: Contacts[],
+  map = new Map<string, Contacts>()
+) {
+  arr.forEach((o) => map.set(o.id, o));
   return [...map.values()];
 }

@@ -10,11 +10,11 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { CompanyAvatar } from "../companies/CompanyAvatar";
 import { stageNames, stages } from "../deals/stages";
-import { Deal } from "../types";
+import { Deals } from "../generated/client";
 
 export const DealsPipeline = () => {
   const { identity } = useGetIdentity();
-  const { data, total, isLoading } = useGetList<Deal>(
+  const { data, total, isLoading } = useGetList<Deals>(
     "deals",
     {
       pagination: { page: 1, perPage: 10 },
@@ -24,11 +24,11 @@ export const DealsPipeline = () => {
     { enabled: !!identity?.id }
   );
 
-  const getOrderedDeals = (data?: Deal[]): Deal[] | undefined => {
+  const getOrderedDeals = (data?: Deals[]): Deals[] | undefined => {
     if (!data) {
       return;
     }
-    const deals: Deal[] = [];
+    const deals: Deals[] = [];
     stages
       .filter((stage) => stage !== "won")
       .forEach((stage) =>
@@ -57,7 +57,7 @@ export const DealsPipeline = () => {
         </Link>
       </Box>
       <Card>
-        <SimpleList<Deal>
+        <SimpleList<Deals>
           aria-describedby="deals-pipeline"
           resource="deals"
           linkType="show"

@@ -5,14 +5,24 @@ import { useState } from "react";
 import { SelectField, useCreatePath, useRecordContext } from "react-admin";
 import { Link } from "react-router-dom";
 
-import { Company } from "../types";
 import { CompanyAvatar } from "./CompanyAvatar";
 import { sectors } from "./sectors";
+import { Companies } from "../generated/client";
+import { useLiveQuery } from "electric-sql/react";
+import { electric } from "../ra-data-electric";
 
-export const CompanyCard = (props: { record?: Company }) => {
+export const CompanyCard = (props: { record?: Companies }) => {
   const [elevation, setElevation] = useState(1);
   const createPath = useCreatePath();
-  const record = useRecordContext<Company>(props);
+  const record = useRecordContext<Companies>(props);
+
+  // Highly contrived examples of using live queries
+  const { results: deals } = useLiveQuery(
+    electric.db.deals.liveMany({ where: { company_id: record.id } })
+  );
+  const { results: contacts } = useLiveQuery(
+    electric.db.contacts.liveMany({ where: { company_id: record.id } })
+  );
   if (!record) return null;
 
   return (
@@ -54,10 +64,10 @@ export const CompanyCard = (props: { record?: Company }) => {
             <ContactsIcon color="disabled" sx={{ mr: 1 }} />
             <div>
               <Typography variant="subtitle2" sx={{ mb: -1 }}>
-                {record.nb_contacts}
+                {contacts?.length || 0}
               </Typography>
               <Typography variant="caption" color="textSecondary">
-                {record.nb_contacts > 1 ? "contacts" : "contact"}
+                {(contacts?.length || 0) > 1 ? "contacts" : "contact"}
               </Typography>
             </div>
           </Box>
@@ -65,10 +75,10 @@ export const CompanyCard = (props: { record?: Company }) => {
             <DealIcon color="disabled" sx={{ mr: 1 }} />
             <div>
               <Typography variant="subtitle2" sx={{ mb: -1 }}>
-                {record.nb_deals}
+                {deals?.length || 0}
               </Typography>
               <Typography variant="caption" color="textSecondary">
-                {record.nb_deals > 1 ? "deals" : "deal"}
+                {(deals?.length || 0) > 1 ? "deals" : "deal"}
               </Typography>
             </div>
           </Box>

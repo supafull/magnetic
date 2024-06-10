@@ -5,7 +5,7 @@ import { SimpleList, useGetIdentity, useGetList } from "react-admin";
 import { Link as RouterLink } from "react-router-dom";
 
 import { Avatar } from "../contacts/Avatar";
-import { Contact } from "../types";
+import { Contacts } from "../generated/client";
 
 export const HotContacts = () => {
   const { identity } = useGetIdentity();
@@ -13,7 +13,7 @@ export const HotContacts = () => {
     data: contactData,
     total: contactTotal,
     isLoading: contactsLoading,
-  } = useGetList<Contact>(
+  } = useGetList<Contacts>(
     "contacts",
     {
       pagination: { page: 1, perPage: 10 },
@@ -40,7 +40,7 @@ export const HotContacts = () => {
         </Link>
       </Box>
       <Card>
-        <SimpleList<Contact>
+        <SimpleList<Contacts>
           aria-describedby="hot-contacts"
           linkType="show"
           data={contactData}
@@ -50,7 +50,7 @@ export const HotContacts = () => {
             `${contact.first_name} ${contact.last_name}`
           }
           resource="contacts"
-          secondaryText={(contact: Contact) =>
+          secondaryText={(contact: Contacts) =>
             formatDistance(new Date(contact.last_seen), new Date(), {
               addSuffix: true,
             })
